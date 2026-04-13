@@ -69,25 +69,33 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* Desktop Navbar */}
-      <nav className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 hidden lg:block",
-        isScrolled ? "glass py-3 shadow-sm" : "bg-white py-6",
-        isVisible ? "translate-y-0" : "-translate-y-full"
+      {/* Desktop Navbar - Floating Islands */}
+      <div className={cn(
+        "fixed top-6 left-0 right-0 z-50 hidden lg:block transition-all duration-500",
+        isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
       )}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            <img src="/assets/logo.png" alt="Taaibosch Organics" className="h-8 md:h-10 w-auto" />
-          </Link>
+          {/* Logo Island */}
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="glass px-5 py-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 flex items-center"
+          >
+            <Link to="/" className="flex items-center">
+              <img src="/assets/logo.png" alt="Taaibosch Organics" className="h-8 w-auto" />
+            </Link>
+          </motion.div>
 
-          <div className="flex items-center space-x-8">
+          {/* Nav Links Island */}
+          <div className="glass px-2 py-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 flex items-center">
             {navLinks.map(link => (
               <Link 
                 key={link.path} 
                 to={link.path}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-brand-ink/60",
-                  location.pathname === link.path ? "text-brand-ink" : "text-brand-ink/40"
+                  "px-5 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-300",
+                  location.pathname === link.path 
+                    ? "bg-brand-ink text-white shadow-md" 
+                    : "text-brand-ink/40 hover:text-brand-ink hover:bg-brand-grey/50"
                 )}
               >
                 {link.name}
@@ -95,54 +103,63 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex items-center space-x-6">
-            <button onClick={() => setIsSearchOpen(true)} className="p-2 hover:bg-brand-grey rounded-full transition-colors">
-              <Search size={20} />
+          {/* Actions Island */}
+          <div className="glass px-2 py-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 flex items-center space-x-1">
+            <button 
+              onClick={() => setIsSearchOpen(true)} 
+              className="p-3 hover:bg-brand-grey rounded-full transition-colors text-brand-ink/60 hover:text-brand-ink"
+            >
+              <Search size={18} />
             </button>
-            <Link to="/wishlist" className="p-2 hover:bg-brand-grey rounded-full transition-colors relative">
-              <Heart size={20} />
+            <Link 
+              to="/wishlist" 
+              className="p-3 hover:bg-brand-grey rounded-full transition-colors relative text-brand-ink/60 hover:text-brand-ink"
+            >
+              <Heart size={18} />
               {wishlist.length > 0 && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-brand-ink rounded-full" />
+                <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-brand-ink rounded-full" />
               )}
             </Link>
-            <Link to="/cart" className="p-2 hover:bg-brand-grey rounded-full transition-colors relative">
-              <ShoppingCart size={20} />
+            <Link 
+              to="/cart" 
+              className="p-3 bg-brand-ink text-white rounded-full transition-transform hover:scale-105 relative"
+            >
+              <ShoppingCart size={18} />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-brand-ink text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-white text-brand-ink text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full shadow-sm">
                   {cartCount}
                 </span>
               )}
             </Link>
           </div>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile Top Header */}
-      <header className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 lg:hidden px-6",
-        isScrolled ? "glass py-3 shadow-sm" : "bg-white py-4",
-        isVisible ? "translate-y-0" : "-translate-y-full"
+      {/* Mobile Top Header - Floating Island */}
+      <div className={cn(
+        "fixed top-4 left-4 right-4 z-50 transition-all duration-500 lg:hidden",
+        isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
       )}>
-        <div className="flex items-center justify-between">
+        <div className="glass px-4 py-3 rounded-2xl shadow-lg border border-black/5 flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <img src="/assets/logo.png" alt="Taaibosch Organics" className="h-6 md:h-8 w-auto" />
+            <img src="/assets/logo.png" alt="Taaibosch Organics" className="h-6 w-auto" />
           </Link>
-          <div className="flex items-center space-x-4">
-            <Link to="/wishlist" className="relative p-2">
+          <div className="flex items-center space-x-2">
+            <Link to="/wishlist" className="relative p-2 text-brand-ink/60">
               <Heart size={20} />
               {wishlist.length > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-brand-ink rounded-full" />
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-brand-ink rounded-full" />
               )}
             </Link>
             <button 
               onClick={() => setIsMenuOpen(true)}
-              className="p-2 hover:bg-brand-grey rounded-full transition-colors"
+              className="p-2 bg-brand-ink text-white rounded-xl transition-colors"
             >
-              <Menu size={24} />
+              <Menu size={20} />
             </button>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Mobile Menu Drawer */}
       <AnimatePresence>
@@ -220,40 +237,37 @@ export const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Mobile Bottom Navbar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-black/5 lg:hidden safe-area-bottom shadow-[0_-8px_30px_rgba(0,0,0,0.08)] min-h-[72px] flex items-center">
-        <div className="flex items-center justify-around w-full px-2">
+      {/* Mobile Bottom Navbar - Floating Island */}
+      <nav className="fixed bottom-6 left-6 right-6 z-[100] lg:hidden">
+        <div className="glass px-2 py-3 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-black/5 flex items-center justify-around">
           {navLinks.filter(link => !['About', 'Contact'].includes(link.name)).map(link => (
             <Link 
               key={link.path} 
               to={link.path}
               className={cn(
-                "flex flex-col items-center space-y-1.5 min-w-[60px] transition-all duration-300",
-                location.pathname === link.path ? "text-brand-ink scale-110" : "text-brand-ink/40"
+                "flex flex-col items-center p-3 rounded-2xl transition-all duration-300",
+                location.pathname === link.path ? "bg-brand-ink text-white shadow-lg scale-105" : "text-brand-ink/40"
               )}
             >
-              <link.icon size={24} />
-              <span className="text-[9px] uppercase tracking-widest font-bold">{link.name}</span>
+              <link.icon size={22} />
             </Link>
           ))}
           <button 
             onClick={() => setIsSearchOpen(true)}
-            className="flex flex-col items-center space-y-1.5 text-brand-ink/40 min-w-[60px] hover:text-brand-ink transition-all duration-300"
+            className="flex flex-col items-center p-3 text-brand-ink/40 hover:text-brand-ink transition-all duration-300"
           >
-            <Search size={24} />
-            <span className="text-[9px] uppercase tracking-widest font-bold">Search</span>
+            <Search size={22} />
           </button>
           <Link 
             to="/cart"
             className={cn(
-              "flex flex-col items-center space-y-1.5 relative min-w-[60px] transition-all duration-300",
-              location.pathname === '/cart' ? "text-brand-ink scale-110" : "text-brand-ink/40"
+              "flex flex-col items-center p-3 relative rounded-2xl transition-all duration-300",
+              location.pathname === '/cart' ? "bg-brand-ink text-white shadow-lg scale-105" : "text-brand-ink/40"
             )}
           >
-            <ShoppingCart size={24} />
-            <span className="text-[9px] uppercase tracking-widest font-bold">Cart</span>
+            <ShoppingCart size={22} />
             {cartCount > 0 && (
-              <span className="absolute -top-1 right-2 bg-brand-ink text-white text-[9px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md">
+              <span className="absolute top-1 right-1 bg-white text-brand-ink text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold shadow-sm">
                 {cartCount}
               </span>
             )}

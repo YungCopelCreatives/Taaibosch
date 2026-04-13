@@ -16,7 +16,7 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/80 backdrop-blur-md border-b border-black/5;
+    @apply bg-white/80 backdrop-blur-md border border-black/5;
   }
   .card-shadow {
     @apply shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300;

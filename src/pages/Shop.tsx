@@ -137,7 +137,7 @@ export const Shop: React.FC = () => {
   );
 
   return (
-    <div className="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+    <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row items-start justify-between mb-12 space-y-8 md:space-y-0">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">Shop All</h1>

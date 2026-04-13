@@ -33,7 +33,7 @@ export const Home: React.FC = () => {
   return (
     <div className="">
       {/* Hero Section */}
-      <section className="relative h-[80vh] md:h-[90vh] flex items-center justify-center overflow-hidden bg-brand-green">
+      <section className="relative min-h-[85vh] md:min-h-[95vh] pt-32 md:pt-40 flex items-center justify-center overflow-hidden bg-brand-green">
         <div className="absolute inset-0 z-0">
           <img 
             src="/assets/general/hero-bg.png" 

@@ -9,7 +9,7 @@ import { motion } from 'motion/react';
 import { EMAIL, LOCATION, WHATSAPP_NUMBER, BLOG_POSTS } from '../constants';
 
 export const About: React.FC = () => (
-  <div className="pt-12 pb-24 px-6 max-w-4xl mx-auto space-y-24">
+  <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-4xl mx-auto space-y-24">
     <section className="space-y-12 text-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -60,7 +60,7 @@ export const About: React.FC = () => (
 );
 
 export const Contact: React.FC = () => (
-  <div className="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+  <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
       <div className="space-y-12">
         <div className="space-y-4">
@@ -132,7 +132,7 @@ export const Contact: React.FC = () => (
 );
 
 export const Blog: React.FC = () => (
-  <div className="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+  <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
     <div className="space-y-4 mb-16">
       <h2 className="text-xs uppercase tracking-[0.3em] font-bold text-brand-ink/40">Wellness Blog</h2>
       <h1 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight">Herbal Education</h1>

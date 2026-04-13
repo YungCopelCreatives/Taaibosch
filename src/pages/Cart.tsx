@@ -91,7 +91,7 @@ Thank you.`;
   }
 
   return (
-    <div className="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+    <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-16">
         {/* Left Column: Flow */}
         <div className="flex-grow space-y-12">

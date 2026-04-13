@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
 import { useCart } from '../CartContext';
 import { ProductCard } from '../components/ProductCard';
+import { ReviewSection } from '../components/ReviewSection';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -64,7 +65,7 @@ export const ProductDetail: React.FC = () => {
   };
 
   return (
-    <div className="pt-12 pb-24 px-6 max-w-7xl mx-auto">
+    <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
       <button 
         onClick={() => navigate(-1)}
         className="flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-brand-ink/40 hover:text-brand-ink transition-all mb-12"
@@ -219,6 +220,11 @@ export const ProductDetail: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <section className="mb-32">
+        <ReviewSection productId={product.id} />
+      </section>
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
