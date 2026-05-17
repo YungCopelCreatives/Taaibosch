@@ -33,13 +33,15 @@ export const Home: React.FC = () => {
   return (
     <div className="">
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] md:min-h-[95vh] pt-32 md:pt-40 flex items-center justify-center overflow-hidden bg-brand-green">
+      <section className="relative min-h-[85vh] md:min-h-[95vh] pt-32 md:pt-40 flex items-center justify-center overflow-hidden bg-white">
         <div className="absolute inset-0 z-0">
           <img 
-            src="/assets/general/hero-bg.png" 
-            alt="Wellness Background" 
-            className="w-full h-full object-cover opacity-20"
+            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1920&h=1080" 
+            alt="Serene coastal shoreline" 
+            className="w-full h-full object-cover opacity-60"
+            referrerPolicy="no-referrer"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
         </div>
         
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-8">
@@ -64,14 +66,14 @@ export const Home: React.FC = () => {
           >
             <Link 
               to="/shop" 
-              className="px-10 py-4 bg-brand-ink text-white rounded-full text-sm font-semibold uppercase tracking-widest hover:opacity-90 transition-all flex items-center space-x-2"
+              className="px-10 py-4 bg-brand-green-deep text-white rounded-full text-sm font-semibold uppercase tracking-widest hover:opacity-90 transition-all flex items-center space-x-2 shadow-lg"
             >
               <span>Shop Collection</span>
               <ArrowRight size={18} />
             </Link>
             <Link 
               to="/about" 
-              className="px-10 py-4 bg-white text-brand-ink rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-brand-grey transition-all"
+              className="px-10 py-4 bg-white text-brand-green-deep border border-brand-green-moss/20 rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-brand-green-light transition-all shadow-sm"
             >
               Our Story
             </Link>
@@ -91,8 +93,8 @@ export const Home: React.FC = () => {
               transition={{ delay: idx * 0.1 }}
               className="flex flex-col items-center text-center space-y-4"
             >
-              <div className="p-4 bg-brand-green rounded-2xl">
-                <benefit.icon size={24} className="text-brand-ink/80" />
+              <div className="p-4 bg-brand-green-light rounded-2xl">
+                <benefit.icon size={24} className="text-brand-green-deep" />
               </div>
               <h3 className="text-sm font-bold uppercase tracking-widest">{benefit.title}</h3>
               <p className="text-sm text-brand-ink/60 leading-relaxed max-w-[250px]">{benefit.desc}</p>
@@ -137,7 +139,7 @@ export const Home: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-serif italic leading-tight">
               "Nature already provides what the body needs to restore, heal, and thrive."
             </h2>
-            <div className="w-12 h-px bg-brand-ink/20 mx-auto" />
+            <div className="w-12 h-px bg-brand-green-moss mx-auto" />
             <p className="text-lg text-brand-ink/60 max-w-2xl mx-auto leading-relaxed">
               Taaibosch Organics was built on a simple belief. In a fast-moving world, we create space for balance.
             </p>
@@ -165,7 +167,7 @@ export const Home: React.FC = () => {
 
       {/* Reseller CTA */}
       <section className="py-24 px-6">
-        <div className="max-w-7xl mx-auto bg-brand-ink text-white rounded-[2rem] p-12 md:p-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto bg-brand-green-deep text-white rounded-[2rem] p-12 md:p-20 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
             <img 
               src="/assets/general/partner-bg.png" 
@@ -186,7 +188,7 @@ export const Home: React.FC = () => {
               href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=Hello, I am interested in reselling Taaibosch Organics products.`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center space-x-3 px-10 py-4 bg-white text-brand-ink rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-brand-grey transition-all"
+              className="inline-flex items-center space-x-3 px-10 py-4 bg-white text-brand-green-deep rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-brand-green-light transition-all shadow-xl"
             >
               <span>Contact Us to Resell</span>
               <ArrowRight size={18} />

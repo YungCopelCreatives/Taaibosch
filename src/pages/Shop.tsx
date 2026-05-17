@@ -4,12 +4,14 @@
  */
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { Filter, ChevronDown, X, Search } from 'lucide-react';
+import { Filter, ChevronDown, X, Search, Heart } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { PRODUCTS } from '../constants';
 import { ProductCard } from '../components/ProductCard';
 import { ProductSkeleton } from '../components/Skeleton';
 import { Category, HealthGoal } from '../types';
+import { useCart } from '../CartContext';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -19,10 +21,16 @@ function cn(...inputs: ClassValue[]) {
 
 export const Shop: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { wishlist } = useCart();
+  const isWishlistPage = location.pathname === '/wishlist';
+  
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
   const [selectedGoals, setSelectedGoals] = useState<HealthGoal[]>([]);
   const [priceRange, setPriceRange] = useState<number>(1000);
   const [sortBy, setSortBy] = useState<'Popular' | 'Price low-high' | 'Price high-low'>('Popular');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
@@ -33,11 +41,24 @@ export const Shop: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const categories: (Category | 'All')[] = ['All', 'Capsules', 'Seamoss', 'Herbal', 'Raw', 'Gel'];
-  const healthGoals: HealthGoal[] = ['Immunity', 'Energy', 'Detox', 'Skin', 'Hormonal balance', 'Metabolism', 'Thyroid', 'Digestion', 'Cleansing', 'Respiratory', 'Vitality', 'Relaxation', 'Sleep', 'Heart', 'Nutrition', 'Stress'];
+  const categories: (Category | 'All')[] = ['All', 'Capsules', 'Seamoss', 'Raw', 'Gel'];
+  const healthGoals: HealthGoal[] = ['Immunity', 'Energy', 'Detox', 'Skin', 'Hormonal balance', 'Metabolism', 'Thyroid', 'Digestion', 'Cleansing', 'Respiratory', 'Vitality', 'Relaxation', 'Sleep', 'Heart', 'Nutrition', 'Stress', 'Blood'];
 
   const filteredProducts = useMemo(() => {
     let result = [...PRODUCTS];
+
+    if (isWishlistPage) {
+      result = result.filter(p => wishlist.includes(p.id));
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        p.summary.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+    }
 
     if (selectedCategory !== 'All') {
       result = result.filter(p => p.category === selectedCategory);
@@ -58,7 +79,7 @@ export const Shop: React.FC = () => {
     }
 
     return result;
-  }, [selectedCategory, selectedGoals, priceRange, sortBy]);
+  }, [selectedCategory, selectedGoals, priceRange, sortBy, isWishlistPage, wishlist, searchQuery]);
 
   const toggleGoal = (goal: HealthGoal) => {
     setSelectedGoals(prev => 
@@ -69,6 +90,29 @@ export const Shop: React.FC = () => {
   const FilterContent = () => (
     <div className="space-y-12">
       <div className="space-y-6">
+        <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink/40">Search</h4>
+        <div className="relative">
+          <input 
+            type="text" 
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-brand-grey px-5 py-3 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-green-deep/20 transition-all"
+          />
+          {searchQuery ? (
+            <button 
+              onClick={() => setSearchQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-brand-green-moss/10 rounded-full transition-colors"
+            >
+              <X size={14} className="text-brand-ink/30" />
+            </button>
+          ) : (
+            <Search size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-ink/30" />
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-6">
         <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink/40">Category</h4>
         <div className="flex flex-col space-y-3">
           {categories.map(cat => (
@@ -77,7 +121,7 @@ export const Shop: React.FC = () => {
               onClick={() => setSelectedCategory(cat)}
               className={cn(
                 "text-left text-sm font-medium transition-all hover:translate-x-1",
-                selectedCategory === cat ? "text-brand-ink" : "text-brand-ink/40"
+                selectedCategory === cat ? "text-brand-green-deep underline underline-offset-8" : "text-brand-ink/40"
               )}
             >
               {cat}
@@ -96,8 +140,8 @@ export const Shop: React.FC = () => {
               className={cn(
                 "px-4 py-2 rounded-full text-xs font-medium transition-all border",
                 selectedGoals.includes(goal) 
-                  ? "bg-brand-ink text-white border-brand-ink" 
-                  : "bg-white text-brand-ink/60 border-black/5 hover:border-brand-ink/20"
+                  ? "bg-brand-green-deep text-white border-brand-green-deep" 
+                  : "bg-white text-brand-ink/60 border-black/5 hover:border-brand-green-deep/20"
               )}
             >
               {goal}
@@ -118,7 +162,7 @@ export const Shop: React.FC = () => {
           step="50"
           value={priceRange}
           onChange={(e) => setPriceRange(parseInt(e.target.value))}
-          className="w-full accent-brand-ink"
+          className="w-full accent-brand-green-deep"
         />
       </div>
 
@@ -128,10 +172,11 @@ export const Shop: React.FC = () => {
           setSelectedGoals([]);
           setPriceRange(1000);
           setSortBy('Popular');
+          setSearchQuery('');
         }}
-        className="w-full py-4 text-xs font-bold uppercase tracking-widest text-brand-ink/40 hover:text-brand-ink transition-all"
+        className="w-full py-4 text-xs font-bold uppercase tracking-widest text-brand-ink/40 hover:text-brand-green-deep transition-all border border-dashed border-brand-green-moss/30 rounded-xl"
       >
-        Reset Filters
+        Reset All Filters
       </button>
     </div>
   );
@@ -140,10 +185,19 @@ export const Shop: React.FC = () => {
     <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row items-start justify-between mb-12 space-y-8 md:space-y-0">
         <div className="space-y-4">
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">Shop All</h1>
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
+            {isWishlistPage ? 'Your Wishlist' : 'Shop All'}
+          </h1>
           <p className="text-brand-ink/60 text-sm max-w-md leading-relaxed">
-            Explore our curated collection of premium herbal wellness products.
+            {isWishlistPage 
+              ? 'Your carefully selected products for later exploration.' 
+              : 'Explore our curated collection of premium herbal wellness products.'}
           </p>
+          <div className="pt-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-brand-green-deep bg-brand-green-moss/10 px-3 py-1 rounded-full">
+              {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'} Found
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center space-x-4 w-full md:w-auto">
@@ -171,9 +225,11 @@ export const Shop: React.FC = () => {
 
       <div className="flex gap-12">
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-fit">
-          <FilterContent />
-        </aside>
+        {!isWishlistPage && (
+          <aside className="hidden lg:block w-64 flex-shrink-0 sticky top-32 h-fit">
+            <FilterContent />
+          </aside>
+        )}
 
         {/* Product Grid */}
         <div className="flex-grow">
@@ -182,7 +238,10 @@ export const Shop: React.FC = () => {
               {Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)}
             </div>
           ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className={cn(
+              "grid gap-8",
+              isWishlistPage ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            )}>
               {filteredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -190,21 +249,32 @@ export const Shop: React.FC = () => {
           ) : (
             <div className="py-24 text-center space-y-6 bg-brand-grey rounded-[2rem]">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto text-brand-ink/20">
-                <Search size={32} />
+                {isWishlistPage ? <Heart size={32} /> : <Search size={32} />}
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-medium">No products found</h3>
-                <p className="text-brand-ink/40 text-sm">Try adjusting your filters to find what you're looking for.</p>
+                <h3 className="text-xl font-medium">
+                  {isWishlistPage ? 'Your wishlist is empty' : 'No products found'}
+                </h3>
+                <p className="text-brand-ink/40 text-sm">
+                  {isWishlistPage 
+                    ? 'Start adding products to your wishlist to see them here.' 
+                    : 'Try adjusting your filters to find what you\'re looking for.'}
+                </p>
               </div>
               <button 
                 onClick={() => {
-                  setSelectedCategory('All');
-                  setSelectedGoals([]);
-                  setPriceRange(1000);
+                  if (isWishlistPage) {
+                    navigate('/shop');
+                  } else {
+                    setSelectedCategory('All');
+                    setSelectedGoals([]);
+                    setPriceRange(1000);
+                    setSearchQuery('');
+                  }
                 }}
-                className="px-8 py-3 bg-brand-ink text-white rounded-full text-xs font-bold uppercase tracking-widest"
+                className="px-8 py-3 bg-brand-green-deep text-white rounded-full text-xs font-bold uppercase tracking-widest"
               >
-                Clear All Filters
+                {isWishlistPage ? 'Browse Products' : 'Clear All Filters'}
               </button>
             </div>
           )}
@@ -238,7 +308,7 @@ export const Shop: React.FC = () => {
               <FilterContent />
               <button 
                 onClick={() => setIsFilterOpen(false)}
-                className="mt-12 w-full py-4 bg-brand-ink text-white rounded-2xl text-xs font-bold uppercase tracking-widest"
+                className="mt-12 w-full py-4 bg-brand-green-deep text-white rounded-2xl text-xs font-bold uppercase tracking-widest"
               >
                 Apply Filters
               </button>

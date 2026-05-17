@@ -49,7 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </span>
           )}
           {product.isTrending && (
-            <span className="px-3 py-1 bg-brand-ink text-white text-[10px] font-semibold uppercase tracking-widest rounded-full shadow-sm">
+            <span className="px-3 py-1 bg-brand-green-deep text-white text-[10px] font-semibold uppercase tracking-widest rounded-full shadow-sm">
               Frequently Ordered
             </span>
           )}
@@ -60,7 +60,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           onClick={() => toggleWishlist(product.id)}
           className={cn(
             "absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm transition-all duration-300",
-            isWishlisted ? "bg-red-50 text-red-500" : "bg-white/90 text-brand-ink/40 hover:text-brand-ink"
+            isWishlisted ? "bg-red-50 text-red-500" : "bg-white/90 text-brand-ink/40 hover:text-brand-green-deep"
           )}
         >
           <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
@@ -69,7 +69,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Quick Add Button (Desktop) */}
         <button 
           onClick={() => addToCart(product)}
-          className="absolute bottom-4 right-4 p-3 bg-brand-ink text-white rounded-full translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hidden md:flex items-center justify-center"
+          className="absolute bottom-4 right-4 p-3 bg-brand-green-deep text-white rounded-full translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hidden md:flex items-center justify-center shadow-lg"
         >
           <Plus size={20} />
         </button>
@@ -84,7 +84,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <p className="text-xs text-brand-ink/40 mb-2 uppercase tracking-widest font-medium">{product.category}</p>
         <div className="flex flex-wrap gap-1 mb-3">
           {product.healthGoals.slice(0, 2).map(goal => (
-            <span key={goal} className="px-2 py-0.5 bg-brand-green/30 text-brand-ink/60 text-[8px] font-bold uppercase tracking-widest rounded-full">
+            <span key={goal} className="px-2 py-0.5 bg-brand-green-moss/20 text-brand-green-deep text-[8px] font-bold uppercase tracking-widest rounded-full">
               Best for: {goal}
             </span>
           ))}
@@ -95,7 +95,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Add to Cart (Mobile) */}
       <button 
         onClick={() => addToCart(product)}
-        className="mt-4 w-full py-3 bg-brand-grey text-brand-ink text-xs font-semibold uppercase tracking-widest rounded-xl hover:bg-brand-ink hover:text-white transition-all md:hidden flex items-center justify-center space-x-2"
+        className="mt-4 w-full py-3 bg-brand-grey text-brand-green-deep text-xs font-semibold uppercase tracking-widest rounded-xl hover:bg-brand-green-deep hover:text-white transition-all md:hidden flex items-center justify-center space-x-2"
       >
         <ShoppingCart size={14} />
         <span>Add to Cart</span>

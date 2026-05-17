@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type Category = 'Capsules' | 'Seamoss' | 'Herbal' | 'Raw' | 'Gel';
-export type HealthGoal = 'Immunity' | 'Energy' | 'Detox' | 'Skin' | 'Hormonal balance' | 'Metabolism' | 'Thyroid' | 'Digestion' | 'Cleansing' | 'Respiratory' | 'Vitality' | 'Relaxation' | 'Sleep' | 'Heart' | 'Nutrition' | 'Stress';
+export type Category = 'Capsules' | 'Seamoss' | 'Raw' | 'Gel';
+export type HealthGoal = 'Immunity' | 'Energy' | 'Detox' | 'Skin' | 'Hormonal balance' | 'Metabolism' | 'Thyroid' | 'Digestion' | 'Cleansing' | 'Respiratory' | 'Vitality' | 'Relaxation' | 'Sleep' | 'Heart' | 'Nutrition' | 'Stress' | 'Blood';
 
 export interface Product {
   id: string;
@@ -13,6 +13,7 @@ export interface Product {
   category: Category;
   healthGoals: HealthGoal[];
   image: string;
+  images?: string[];
   summary: string;
   headline?: string;
   hook?: string;

@@ -124,7 +124,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                 onClick={() => setFilter(f)}
                 className={cn(
                   "px-6 py-2 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all",
-                  filter === f ? "bg-brand-ink text-white shadow-md" : "text-brand-ink/40 hover:text-brand-ink"
+                  filter === f ? "bg-brand-green-deep text-white shadow-md" : "text-brand-ink/40 hover:text-brand-green-deep"
                 )}
               >
                 {f}
@@ -133,7 +133,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
           </div>
           <button 
             onClick={() => setIsFormOpen(true)}
-            className="px-8 py-3 bg-brand-ink text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all"
+            className="px-8 py-3 bg-brand-green-deep text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all shadow-md"
           >
             Write a Review
           </button>
@@ -155,7 +155,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                   <input 
                     type="text" 
                     required
-                    className="w-full px-6 py-4 bg-white rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-ink transition-all"
+                    className="w-full px-6 py-4 bg-white rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-green-deep transition-all"
                     value={newReview.userName}
                     onChange={e => setNewReview({ ...newReview, userName: e.target.value })}
                   />
@@ -181,7 +181,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                 <textarea 
                   required
                   rows={4}
-                  className="w-full px-6 py-4 bg-white rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-ink transition-all resize-none"
+                  className="w-full px-6 py-4 bg-white rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-green-deep transition-all resize-none"
                   value={newReview.comment}
                   onChange={e => setNewReview({ ...newReview, comment: e.target.value })}
                 />
@@ -190,13 +190,13 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                 <button 
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-8 py-3 text-[10px] font-bold uppercase tracking-widest text-brand-ink/40 hover:text-brand-ink"
+                  className="px-8 py-3 text-[10px] font-bold uppercase tracking-widest text-brand-ink/40 hover:text-brand-green-deep"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
-                  className="px-10 py-3 bg-brand-ink text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center space-x-2"
+                  className="px-10 py-3 bg-brand-green-deep text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center space-x-2 shadow-md"
                 >
                   <span>Submit Review</span>
                   <Send size={14} />

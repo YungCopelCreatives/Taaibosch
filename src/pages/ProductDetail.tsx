@@ -23,15 +23,16 @@ export const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const { addToCart, wishlist, toggleWishlist } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [expandedSection, setExpandedSection] = useState<string | null>('benefits');
 
   const product = PRODUCTS.find(p => p.id === id);
   const isWishlisted = wishlist.includes(id || '');
-  const productSlug = product?.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') || '';
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setQuantity(1);
+    setSelectedImage(null);
   }, [id]);
 
   if (!product) {
@@ -42,6 +43,9 @@ export const ProductDetail: React.FC = () => {
       </div>
     );
   }
+
+  const mainImage = selectedImage || product.image;
+  const galleryImages = product.images || [product.image];
 
   const relatedProducts = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
@@ -78,17 +82,25 @@ export const ProductDetail: React.FC = () => {
         {/* Gallery */}
         <div className="space-y-6">
           <motion.div 
+            key={mainImage}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="aspect-square rounded-[2rem] overflow-hidden bg-brand-grey"
           >
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
           </motion.div>
           <div className="grid grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-brand-grey opacity-40 hover:opacity-100 transition-all cursor-pointer">
-                <img src={`/assets/products/gallery/${productSlug}-${i}.png`} alt={`${product.name} ${i}`} className="w-full h-full object-cover" />
-              </div>
+            {galleryImages.map((img, idx) => (
+              <button 
+                key={idx} 
+                onClick={() => setSelectedImage(img)}
+                className={cn(
+                  "aspect-square rounded-2xl overflow-hidden bg-brand-grey transition-all cursor-pointer border-2",
+                  mainImage === img ? "border-brand-ink opacity-100" : "border-transparent opacity-40 hover:opacity-100"
+                )}
+              >
+                <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
+              </button>
             ))}
           </div>
         </div>
