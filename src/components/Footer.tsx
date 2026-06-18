@@ -33,14 +33,35 @@ export const Footer: React.FC = () => {
 
         <div className="space-y-6">
           <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink/40">Quick Links</h4>
-          <ul className="space-y-4">
+          <ul className="space-y-3">
             {['Home', 'Shop', 'About', 'Contact', 'Blog'].map(item => (
               <li key={item}>
-                <Link to={item === 'Home' ? '/' : `/${item.toLowerCase()}`} className="text-sm hover:underline transition-all">
+                <Link to={item === 'Home' ? '/' : `/${item.toLowerCase()}`} className="text-xs font-semibold hover:text-[#2D3627] transition-all uppercase tracking-wider block">
                   {item}
                 </Link>
               </li>
             ))}
+          </ul>
+        </div>
+
+        <div className="space-y-6">
+          <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink/40">Fulfillment & Policy</h4>
+          <ul className="space-y-3 text-xs font-medium">
+            <li>
+              <Link to="/ordering-process" className="hover:underline transition-all block">Ordering Process</Link>
+            </li>
+            <li>
+              <Link to="/delivery-and-shipping" className="hover:underline transition-all block">Delivery & Shipping</Link>
+            </li>
+            <li>
+              <Link to="/privacy-policy" className="hover:underline transition-all block">Privacy Policy</Link>
+            </li>
+            <li>
+              <Link to="/wiki/chondrus-crispus" className="text-brand-green-deep hover:underline transition-all font-semibold block">Wiki: Irish Moss (Sea Moss)</Link>
+            </li>
+            <li>
+              <Link to="/wiki/annona-muricata" className="text-brand-green-deep hover:underline transition-all font-semibold block">Wiki: Soursop (Graviola)</Link>
+            </li>
           </ul>
         </div>
 

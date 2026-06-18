@@ -4,6 +4,7 @@
  */
 
 import { Product, BlogPost } from './types';
+import { EXPANDED_BLOG_POSTS } from './data/wikiData';
 
 export const PRODUCTS: Product[] = [
   {
@@ -12,7 +13,7 @@ export const PRODUCTS: Product[] = [
     price: 200,
     category: 'Capsules',
     healthGoals: ['Energy', 'Skin', 'Vitality'],
-    image: '/assets/products/capsules/Seamoss-Capsule.svg',
+    image: '/assets/products/capsules/seamoss-capsule.svg',
     images: ['/assets/products/capsules/seamoss-capsule-grid-1.png', '/assets/products/capsules/seamoss-capsule-grid-2.png', '/assets/products/capsules/seamoss-capsule-grid-3.png'],
     headline: '92 Essential Minerals for Total Body Restoration',
     hook: 'The ocean’s most powerful multivitamin, encapsulated for your convenience.',
@@ -30,7 +31,7 @@ export const PRODUCTS: Product[] = [
     price: 200,
     category: 'Capsules',
     healthGoals: ['Immunity', 'Vitality'],
-    image: '/assets/products/capsules/Soursop-Capsule.svg',
+    image: '/assets/products/capsules/soursop-capsule.svg',
     images: ['/assets/products/capsules/soursop-grid.png', '/assets/products/capsules/soursop-grid-2.png', '/assets/products/capsules/soursop-grid-3.png'],
     headline: 'Nature’s Cellular Defense and Immune Support',
     hook: 'Harness the power of Graviola for deep cellular protection.',
@@ -48,7 +49,7 @@ export const PRODUCTS: Product[] = [
     price: 200,
     category: 'Capsules',
     healthGoals: ['Immunity', 'Vitality'],
-    image: '/assets/products/capsules/Elderberry-Capsule.svg',
+    image: '/assets/products/capsules/elderberry-capsule.svg',
     images: ['/assets/products/capsules/elderberry-grid.png', '/assets/products/capsules/elderberry-grid-2.png', '/assets/products/capsules/elderberry-grid-3.png'],
     headline: 'Concentrated Immune Defense for Year-Round Protection',
     hook: 'Don’t wait for the sniffles — build your shield today.',
@@ -66,7 +67,7 @@ export const PRODUCTS: Product[] = [
     price: 200,
     category: 'Capsules',
     healthGoals: ['Cleansing', 'Immunity'],
-    image: "/assets/products/capsules/Pau D'arco-Capsule.svg",
+    image: "/assets/products/capsules/pau-darco-capsule.svg",
     images: ['/assets/products/capsules/pau-darco-grid.png', '/assets/products/capsules/pau-darco-grid-2.png', '/assets/products/capsules/pau-darco-grid-3.png'],
     headline: 'Traditional Amazonian Support for Internal Balance',
     hook: 'Deep internal cleansing from the heart of the rainforest.',
@@ -83,7 +84,7 @@ export const PRODUCTS: Product[] = [
     price: 250,
     category: 'Capsules',
     healthGoals: ['Energy', 'Vitality', 'Thyroid'],
-    image: '/assets/products/capsules/Bromide+-capsule.svg',
+    image: '/assets/products/capsules/bromide-plus-capsule.png',
     images: ['/assets/products/capsules/bromide-plus-grid.png', '/assets/products/capsules/bromide-plus-grid-2.png', '/assets/products/capsules/bromide-plus-grid-3.png'],
     headline: 'The Ultimate Alkaline Mineral Blend',
     hook: 'Bladderwrack meets Sea Moss for maximum metabolic support.',
@@ -95,29 +96,14 @@ export const PRODUCTS: Product[] = [
     benefits: ['Optimizes thyroid function', 'Boosts metabolic rate', 'Rich in natural iodine', 'Supports joint and bone health'],
     isTrending: true
   },
-  {
-    id: '6',
-    name: 'Bladderwrack Capsules',
-    price: 200,
-    category: 'Capsules',
-    healthGoals: ['Thyroid', 'Metabolism'],
-    image: '/assets/products/capsules/Bladderwrack-Capsule.svg',
-    headline: 'Thyroid Support in a Convenient Capsule',
-    hook: 'Harness the power of the sea for metabolic balance.',
-    summary: 'Our Bladderwrack Capsules provide a concentrated dose of this iodine-rich sea herb. Essential for thyroid health and metabolic regulation, these capsules are a simple way to support your body’s natural energy processes.',
-    whyPeopleChooseIt: 'A convenient way to get the benefits of bladderwrack without the taste.',
-    ingredients: ['100% Wildcrafted Bladderwrack Powder', 'Vegetable Cellulose Capsule'],
-    usage: 'Take 1-2 capsules daily with water.',
-    whoItsFor: 'Individuals looking to support thyroid function and healthy metabolism.',
-    benefits: ['Rich in natural iodine', 'Supports thyroid health', 'Aids in metabolic regulation', 'Promotes healthy digestion'],
-  },
+
   {
     id: '27',
     name: 'Burdock Capsules',
     price: 200,
     category: 'Capsules',
     healthGoals: ['Detox', 'Skin', 'Blood'],
-    image: '/assets/products/capsules/Burdock-Capsule.svg',
+    image: '/assets/products/capsules/burdock-capsule.png',
     images: ['/assets/products/capsules/burdock-grid.png', '/assets/products/capsules/burdock-grid-2.png', '/assets/products/capsules/burdock-grid-3.png'],
     headline: 'Purify Your System with Burdock Capsules',
     hook: 'The ancient secret for clear skin and clean blood.',
@@ -129,29 +115,14 @@ export const PRODUCTS: Product[] = [
     benefits: ['Supports blood purification', 'Promotes healthy, clear skin', 'Aids liver and kidney function', 'Rich in natural antioxidants'],
     isTrending: true
   },
-  {
-    id: '21',
-    name: 'Yellow Dock Capsules',
-    price: 200,
-    category: 'Capsules',
-    healthGoals: ['Detox', 'Skin', 'Blood'],
-    image: '/assets/products/capsules/YellowDock-Capsule.svg',
-    headline: 'Traditional Blood Purifier in Capsule Form',
-    hook: 'Support your liver and enrich your blood naturally.',
-    summary: 'Our Yellow Dock Capsules offer a convenient way to benefit from this powerful root. Known for its high iron content and liver-supporting properties, Yellow Dock is excellent for maintaining healthy blood and clear skin.',
-    whyPeopleChooseIt: 'A simple alternative to teas for those seeking natural iron and detoxification support.',
-    ingredients: ['100% Organic Yellow Dock Root Powder', 'Vegetable Cellulose Capsule'],
-    usage: 'Take 2 capsules daily with water.',
-    whoItsFor: 'Individuals looking to support their blood health and liver function naturally.',
-    benefits: ['Natural source of iron', 'Supports liver detoxification', 'Promotes healthy skin', 'Aids in digestion'],
-  },
+
   {
     id: '11',
     name: 'Sea Moss Raw',
     price: 150,
     category: 'Seamoss',
     healthGoals: ['Energy', 'Digestion', 'Skin'],
-    image: '/assets/products/seamoss/Seamoss - raw.svg',
+    image: '/assets/products/seamoss/seamoss-raw.png',
     images: ['/assets/products/capsules/seamoss-grid.png', '/assets/products/capsules/seamoss-grid-2.png', '/assets/products/capsules/seamoss-grid-3.png'],
     headline: 'Wildcrafted Ocean Superfood in its Purest Form',
     hook: 'Prepare your own wellness gel at home with the highest quality moss.',
@@ -168,7 +139,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     category: 'Raw',
     healthGoals: ['Respiratory', 'Cleansing'],
-    image: '/assets/products/raw/Mullein - raw.svg',
+    image: '/assets/products/raw/mullein-raw.png',
     headline: 'Natural Respiratory Relief and Lung Support',
     hook: 'Breathe easy with the ancient wisdom of Mullein.',
     summary: 'Mullein has a long history of use for respiratory health. Its demulcent and expectorant properties make it excellent for soothing the lungs and helping to clear excess mucus from the respiratory tract.',
@@ -184,7 +155,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     category: 'Raw',
     healthGoals: ['Nutrition', 'Vitality', 'Blood'],
-    image: '/assets/products/raw/Stinging nettle - raw.svg',
+    image: '/assets/products/raw/stinging-nettle-raw.png',
     headline: 'The Multi-Mineral Powerhouse of the Earth',
     hook: 'Fuel your body with one of nature’s most nutrient-dense greens.',
     summary: 'Stinging Nettle is packed with vitamins, minerals, and polyphenols. It is traditionally used to support iron levels, joint health, and a healthy inflammatory response throughout the body.',
@@ -200,7 +171,7 @@ export const PRODUCTS: Product[] = [
     price: 140,
     category: 'Raw',
     healthGoals: ['Immunity', 'Vitality'],
-    image: '/assets/products/raw/Elderberry - raw.svg',
+    image: '/assets/products/raw/elderberry-raw.png',
     headline: 'Pure Dried Elderberries for Immune Support',
     hook: 'Craft your own potent syrups and teas at home.',
     summary: 'Our Raw Elderberries are carefully dried to preserve their natural antioxidants and high Vitamin C content. Ideal for making homemade elderberry syrup, these berries are a traditional defense against seasonal ailments.',
@@ -216,7 +187,7 @@ export const PRODUCTS: Product[] = [
     price: 170,
     category: 'Raw',
     healthGoals: ['Relaxation', 'Sleep', 'Stress'],
-    image: '/assets/products/raw/Valerian - raw.svg',
+    image: '/assets/products/raw/valerian-raw.png',
     headline: 'Nature’s Gentle Tranquilizer for Restful Sleep',
     hook: 'Unwind and reclaim your peace with Valerian.',
     summary: 'Valerian Root is world-renowned for its ability to promote relaxation and restful sleep. It helps to calm the nervous system and is a perfect companion for those dealing with stress or occasional sleeplessness.',
@@ -232,7 +203,7 @@ export const PRODUCTS: Product[] = [
     price: 140,
     category: 'Raw',
     healthGoals: ['Heart', 'Nutrition', 'Detox'],
-    image: '/assets/products/raw/Hibiscus - raw.svg',
+    image: '/assets/products/raw/hibiscus-raw.png',
     headline: 'Heart-Healthy Antioxidants with a Vibrant Taste',
     hook: 'Refresh your body and protect your heart with Hibiscus.',
     summary: 'Hibiscus is not only delicious and refreshing but also packed with antioxidants. It is traditionally used to support healthy blood pressure levels and cardiovascular health while providing a high dose of Vitamin C.',
@@ -243,28 +214,12 @@ export const PRODUCTS: Product[] = [
     benefits: ['High in Vitamin C and antioxidants', 'Supports healthy blood pressure', 'Promotes cardiovascular health', 'Refreshing tart flavor']
   },
   {
-    id: '23',
-    name: 'Burdock Root Raw',
-    price: 160,
-    category: 'Raw',
-    healthGoals: ['Detox', 'Skin', 'Blood'],
-    image: '/assets/products/raw/Burdock - raw.svg',
-    headline: 'The Essential Blood Cleansing Root',
-    hook: 'Purify your system from within.',
-    summary: 'Burdock Root is a foundational herb in traditional detoxification. It works by supporting the liver and kidneys to filter the blood, making it an excellent choice for those seeking clear skin and general internal cleansing.',
-    whyPeopleChooseIt: 'Valued for its deep-acting blood purifying and skin-clearing benefits.',
-    ingredients: ['100% Organic Dried Burdock Root'],
-    usage: 'Simmer 1 tablespoon in 2 cups of water for 15-20 minutes to create a decoction.',
-    whoItsFor: 'Individuals looking to address skin issues from the inside out or perform a systemic detox.',
-    benefits: ['Strong blood purifier', 'Supports liver health', 'Promotes radiant skin', 'Rich in natural inulin']
-  },
-  {
     id: '26',
     name: 'Dandelion Raw',
     price: 150,
     category: 'Raw',
     healthGoals: ['Detox', 'Digestion', 'Cleansing'],
-    image: '/assets/products/raw/Dandelion - raw.svg',
+    image: '/assets/products/raw/dandelion-raw.png',
     headline: 'The Ultimate Liver Support Herb',
     hook: 'Cleanse and rejuvenate your body’s natural filter.',
     summary: 'Dandelion Root is a powerhouse for liver and gallbladder health. It acts as a gentle diuretic and supports the production of bile, aiding in digestion and the removal of toxins from the body.',
@@ -280,7 +235,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     category: 'Raw',
     healthGoals: ['Thyroid', 'Metabolism', 'Vitality'],
-    image: '/assets/products/raw/Bladderwrack-raw.svg',
+    image: '/assets/products/raw/bladderwrack-raw.png',
     headline: 'Iodine-Rich Sea Vegetable for Thyroid Health',
     hook: 'Support your metabolism with the bounty of the sea.',
     summary: 'Bladderwrack is a sea vegetable rich in iodine, a mineral essential for healthy thyroid function. It also contains alginic acid, which supports digestive health and may help with satiety.',
@@ -296,7 +251,7 @@ export const PRODUCTS: Product[] = [
     price: 180,
     category: 'Raw',
     healthGoals: ['Blood', 'Cleansing', 'Detox'],
-    image: '/assets/products/raw/Yellowdock - raw.svg',
+    image: '/assets/products/raw/yellowdock-raw.png',
     headline: 'Traditional Blood Purifier and Iron Source',
     hook: 'Support your liver and enrich your blood naturally.',
     summary: 'Yellow Dock Root is highly valued for its ability to support healthy digestion and as a natural source of iron. It is often used in traditional herbalism to promote healthy skin and support the body’s natural detoxification processes.',
@@ -312,7 +267,7 @@ export const PRODUCTS: Product[] = [
     price: 160,
     category: 'Raw',
     healthGoals: ['Cleansing', 'Immunity'],
-    image: '/assets/products/raw/Pau D\'arco - raw.svg',
+    image: '/assets/products/raw/pau-darco-raw.png',
     images: ['/assets/products/capsules/pau-darco-grid.png', '/assets/products/capsules/pau-darco-grid-2.png', '/assets/products/capsules/pau-darco-grid-3.png'],
     headline: 'Ancient Amazonian Inner Bark for Internal Purity',
     hook: 'Deep herbal support for internal microbial balance.',
@@ -329,7 +284,7 @@ export const PRODUCTS: Product[] = [
     price: 200,
     category: 'Gel',
     healthGoals: ['Energy', 'Digestion', 'Vitality'],
-    image: '/assets/products/gel/seamoss - gel.svg',
+    image: '/assets/products/gel/seamoss-gel.png',
     images: ['/assets/products/gel/plain-gel.png'],
     headline: 'Freshly Prepared Mineral Support, Ready to Use',
     hook: 'The easiest way to get your 92 minerals every single day.',
@@ -347,7 +302,7 @@ export const PRODUCTS: Product[] = [
     price: 200,
     category: 'Gel',
     healthGoals: ['Energy', 'Digestion', 'Vitality'],
-    image: '/assets/products/gel/berry seamoss - gell.svg',
+    image: '/assets/products/gel/berry-seamoss-gel.png',
     headline: 'Delicious Berry-Infused Sea Moss Gel',
     hook: 'All the benefits of sea moss with a burst of berry flavor.',
     summary: 'Our Berry Flavor Sea Moss Gel combines the nutrient density of wildcrafted sea moss with the delicious taste of organic berries. It’s the perfect way to enjoy your daily minerals while satisfying your sweet tooth.',
@@ -360,29 +315,7 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
-export const BLOG_POSTS: BlogPost[] = [
-  {
-    id: '1',
-    title: 'The Magic of Seamoss: Why Your Body Needs It',
-    preview: 'Discover the 92 minerals packed into this ocean superfood and how it can transform your health.',
-    image: '/assets/blog/seamoss-magic.png',
-    topics: ['Seamoss education', 'Herbal benefits']
-  },
-  {
-    id: '2',
-    title: '5 Natural Ways to Boost Your Immunity This Winter',
-    preview: 'Simple, effective herbal remedies to keep your immune system strong during the colder months.',
-    image: '/assets/blog/immunity-boost.png',
-    topics: ['Immunity', 'Natural wellness tips']
-  },
-  {
-    id: '3',
-    title: 'Understanding Adaptogens: Ashwagandha and Beyond',
-    preview: 'Learn how adaptogenic herbs help your body adapt to stress and restore balance.',
-    image: '/assets/blog/adaptogens.png',
-    topics: ['Herbal benefits', 'Natural wellness tips']
-  }
-];
+export const BLOG_POSTS: BlogPost[] = EXPANDED_BLOG_POSTS;
 
 export const WHATSAPP_NUMBER = '+27645022066';
 export const DELIVERY_FEE = 150;

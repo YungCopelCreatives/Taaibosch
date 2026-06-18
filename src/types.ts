@@ -47,6 +47,25 @@ export interface BlogPost {
   preview: string;
   image: string;
   topics: string[];
+  date?: string;
+  author?: string;
+  content?: string;
+}
+
+export interface WikiArticle {
+  slug: string;
+  name: string;
+  botanicalName: string;
+  family: string;
+  nativeRegion: string;
+  primaryUses: string[];
+  constituents: string[];
+  synergy: string;
+  introduction: string;
+  traditionalUse: string;
+  scientificInsights: string;
+  therapeuticAesthetics: string; // Detail on skin, gut or vitality
+  associatedProducts: string[]; // Product IDs
 }
 
 export interface Review {

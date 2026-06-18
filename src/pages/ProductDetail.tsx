@@ -54,6 +54,11 @@ export const ProductDetail: React.FC = () => {
     { id: 'ingredients', title: 'Ingredients', content: product.ingredients || [] },
     { id: 'usage', title: 'Usage', content: [product.usage] },
     { id: 'who', title: "Who it's for", content: [product.whoItsFor] },
+    { id: 'disclaimer', title: 'Botanical Disclaimer', content: [
+      'This natural botanical supplement is intended strictly for educational, dietary enrichment, and metabolic-mineral restoration.',
+      'Statements regarding organic constituents, thyroid balances, or biological tissue repair have not been evaluated or verified by SAHPRA (South African Health Products Regulatory Authority).',
+      'This product is not formulated to diagnose, mitigate, prevent, or cure any clinical condition. Consult with a registered medical practitioner prior to initiating any holistic routines.'
+    ]}
   ];
 
   const handleAddToCart = () => {
@@ -173,11 +178,17 @@ export const ProductDetail: React.FC = () => {
               </div>
               <button 
                 onClick={handleWhatsAppOrder}
-                className="w-full py-5 bg-[#25D366] text-white rounded-full text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center space-x-3"
+                className="w-full py-5 bg-[#25D366] text-white rounded-full text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center space-x-3 animate-pulse"
               >
                 <MessageCircle size={20} fill="currentColor" />
                 <span>Order via WhatsApp</span>
               </button>
+              
+              <div className="bg-brand-grey/50 p-4 rounded-2xl border border-black/5 text-center mt-3">
+                <p className="text-[10px] text-brand-ink/50 leading-relaxed font-semibold">
+                  * <strong>SAHPRA Notice:</strong> These statements have not been clinically evaluated. This product is intended strictly as a botanical mineral supplement and is not formulated to diagnose or substitute guidance from registered medical practitioners.
+                </p>
+              </div>
             </div>
           </div>
 

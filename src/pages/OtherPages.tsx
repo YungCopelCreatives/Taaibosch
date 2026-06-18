@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, MessageCircle, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { EMAIL, LOCATION, WHATSAPP_NUMBER, BLOG_POSTS } from '../constants';
@@ -140,31 +141,32 @@ export const Blog: React.FC = () => (
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
       {BLOG_POSTS.map((post, idx) => (
-        <motion.article 
-          key={post.id}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: idx * 0.1 }}
-          className="group cursor-pointer"
-        >
-          <div className="aspect-[4/3] rounded-[2rem] overflow-hidden bg-brand-grey mb-6">
-            <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-          </div>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {post.topics.map(topic => (
-                <span key={topic} className="text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{topic}</span>
-              ))}
+        <Link key={post.id} to={`/blog/${post.id}`} className="block">
+          <motion.article 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.05 }}
+            className="group cursor-pointer space-y-6"
+          >
+            <div className="aspect-[4/3] rounded-[2rem] overflow-hidden bg-brand-grey">
+              <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             </div>
-            <h3 className="text-xl font-semibold tracking-tight group-hover:underline leading-tight">{post.title}</h3>
-            <p className="text-sm text-brand-ink/60 leading-relaxed line-clamp-2">{post.preview}</p>
-            <button className="flex items-center space-x-2 text-xs font-bold uppercase tracking-widest hover:text-brand-ink/60 transition-all">
-              <span>Read More</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
-        </motion.article>
+            <div className="space-y-4 text-left">
+              <div className="flex flex-wrap gap-2">
+                {post.topics.map(topic => (
+                  <span key={topic} className="text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{topic}</span>
+                ))}
+              </div>
+              <h3 className="text-xl font-semibold tracking-tight group-hover:text-brand-green-deep leading-tight transition-colors">{post.title}</h3>
+              <p className="text-sm text-brand-ink/60 leading-relaxed line-clamp-2">{post.preview}</p>
+              <span className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-brand-ink hover:opacity-80 transition-all">
+                <span>Read Article</span>
+                <ArrowRight size={14} />
+              </span>
+            </div>
+          </motion.article>
+        </Link>
       ))}
     </div>
   </div>

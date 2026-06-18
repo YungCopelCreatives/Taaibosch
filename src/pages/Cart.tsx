@@ -32,7 +32,9 @@ export const Cart: React.FC = () => {
   const wellnessGoal = 600;
   const remainingForGoal = Math.max(0, wellnessGoal - cartTotal);
 
-  const totalPayable = cartTotal + DELIVERY_FEE;
+  const isFreeDelivery = cartTotal >= 1000;
+  const deliveryFee = isFreeDelivery ? 0 : DELIVERY_FEE;
+  const totalPayable = cartTotal + deliveryFee;
 
   const handleWhatsAppCheckout = () => {
     let detailsStr = `Full Name: ${deliveryDetails.fullName}\nContact: ${deliveryDetails.contactNumber}\n`;
@@ -53,7 +55,7 @@ Products:
 ${productsStr}
 
 Subtotal: R${cartTotal}
-Delivery Fee: R${DELIVERY_FEE}
+Delivery Fee: ${isFreeDelivery ? 'FREE (Orders over R1000 qualify)' : `R${DELIVERY_FEE}`}
 Total Payable: R${totalPayable}
 
 Delivery Method: ${deliveryDetails.courier}
@@ -362,14 +364,30 @@ Thank you.`;
               </div>
             )}
             
-            <div className="space-y-4">
+             <div className="space-y-4">
+              {cartTotal < 1000 ? (
+                <div className="bg-brand-green-moss/10 p-4 rounded-2xl border border-brand-green-moss/20 text-left">
+                  <p className="text-xs text-brand-ink/80 leading-relaxed">
+                    💡 Spend <strong>R{1000 - cartTotal}</strong> more to qualify for <strong>FREE Delivery</strong> across South Africa!
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-brand-green/20 p-4 rounded-2xl border border-brand-green/30 text-left">
+                  <p className="text-xs text-brand-green-deep font-bold">
+                    🎉 Outstanding! Your order qualifies for FREE Delivery across South Africa!
+                  </p>
+                </div>
+              )}
+
               <div className="flex items-center justify-between text-sm">
                 <span className="text-brand-ink/40">Subtotal</span>
                 <span className="font-bold">R{cartTotal}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-brand-ink/40">Delivery Fee</span>
-                <span className="font-bold">R{DELIVERY_FEE}</span>
+                <span className="font-bold text-brand-green-deep">
+                  {isFreeDelivery ? 'FREE' : `R${DELIVERY_FEE}`}
+                </span>
               </div>
               <div className="h-px bg-black/5" />
               <div className="flex items-center justify-between text-lg">

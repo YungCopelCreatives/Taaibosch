@@ -12,6 +12,8 @@ import { Shop } from './pages/Shop';
 import { ProductDetail } from './pages/ProductDetail';
 import { Cart } from './pages/Cart';
 import { About, Contact, Blog } from './pages/OtherPages';
+import { BlogPostDetail, WikiPage } from './pages/BlogAndWiki';
+import { PrivacyPolicy, DeliveryAndShipping, OrderingProcess } from './pages/LegalAndInfo';
 import { CartProvider } from './CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -56,6 +58,11 @@ export default function App() {
               <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
               <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
               <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
+              <Route path="/blog/:id" element={<PageWrapper><BlogPostDetail /></PageWrapper>} />
+              <Route path="/wiki/:slug" element={<PageWrapper><WikiPage /></PageWrapper>} />
+              <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
+              <Route path="/delivery-and-shipping" element={<PageWrapper><DeliveryAndShipping /></PageWrapper>} />
+              <Route path="/ordering-process" element={<PageWrapper><OrderingProcess /></PageWrapper>} />
               <Route path="/wishlist" element={<PageWrapper><Shop /></PageWrapper>} />
             </Routes>
           </main>

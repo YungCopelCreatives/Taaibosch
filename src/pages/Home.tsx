@@ -10,9 +10,11 @@ import { motion } from 'motion/react';
 import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
 import { ProductCard } from '../components/ProductCard';
 import { ProductSkeleton } from '../components/Skeleton';
+import { AnimatePresence } from 'motion/react';
 
 export const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
   const bestSellers = PRODUCTS.filter(p => p.isBestSeller).slice(0, 4);
   const featuredProducts = PRODUCTS.slice(0, 3);
 
@@ -22,6 +24,23 @@ export const Home: React.FC = () => {
       setIsLoading(false);
     }, 1500);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Transition the announcement card slide-in
+    const enterTimer = setTimeout(() => {
+      setShowPopup(true);
+    }, 1000);
+
+    // Auto dismiss after 5 seconds of active presentation
+    const exitTimer = setTimeout(() => {
+      setShowPopup(false);
+    }, 6000);
+
+    return () => {
+      clearTimeout(enterTimer);
+      clearTimeout(exitTimer);
+    };
   }, []);
 
   const benefits = [
@@ -79,6 +98,46 @@ export const Home: React.FC = () => {
             </Link>
           </motion.div>
         </div>
+
+        {/* Dynamic & Timed Free Shipping Popup Announcement */}
+        <AnimatePresence>
+          {showPopup && (
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.9 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="absolute bottom-6 left-6 right-6 md:left-auto md:right-12 z-20 max-w-sm glass p-6 rounded-3xl border border-brand-green-moss/20 shadow-2xl space-y-3 text-left bg-white/90 backdrop-blur-md"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-brand-green-deep">
+                  <span className="w-2.5 h-2.5 rounded-full bg-brand-green-deep animate-pulse" />
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Fulfillment Alert</span>
+                </div>
+                <button 
+                  onClick={() => setShowPopup(false)}
+                  className="p-1 hover:bg-black/5 rounded-full transition-colors text-brand-ink/40 hover:text-brand-ink"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="space-y-1">
+                <h4 className="font-bold text-sm text-brand-ink">Orders above R1000 get FREE Delivery!</h4>
+                <p className="text-xs text-brand-ink/60 leading-relaxed">
+                  Combine your wellness favorites—Free delivery applies automatically across South Africa once your subtotal hits R1000.
+                </p>
+              </div>
+              
+              <div className="pt-2 border-t border-black/5 text-[9px] text-brand-ink/40 tracking-wide font-medium flex items-center justify-between">
+                <span>* Metro Hub deliveries query. Terms apply.</span>
+                <Link to="/delivery-and-shipping" className="underline hover:text-brand-green-deep font-bold text-brand-ink/80 transition-colors">See Conditions</Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
 
       {/* Benefits Strip */}
