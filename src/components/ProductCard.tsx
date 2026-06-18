@@ -11,6 +11,7 @@ import { Product } from '../types';
 import { useCart } from '../CartContext';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { ImageWithSkeleton } from './ImageWithSkeleton';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,10 +34,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <div className="relative aspect-square overflow-hidden rounded-2xl bg-brand-grey mb-4">
         <Link to={`/product/${product.id}`} className="block w-full h-full">
-          <img 
+          <ImageWithSkeleton 
             src={product.image} 
             alt={product.name} 
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            wrapperClassName="w-full h-full"
           />
         </Link>
         

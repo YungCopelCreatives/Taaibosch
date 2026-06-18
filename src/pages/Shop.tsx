@@ -34,10 +34,10 @@ export const Shop: React.FC = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    // Simulate data fetching
+    // Ultra-fast transition animation loader
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 

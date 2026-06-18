@@ -11,6 +11,7 @@ import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
 import { ProductCard } from '../components/ProductCard';
 import { ProductSkeleton } from '../components/Skeleton';
 import { AnimatePresence } from 'motion/react';
+import { ImageWithSkeleton } from '../components/ImageWithSkeleton';
 
 export const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,10 +20,10 @@ export const Home: React.FC = () => {
   const featuredProducts = PRODUCTS.slice(0, 3);
 
   useEffect(() => {
-    // Simulate data fetching
+    // Ultra-fast transition animation loader
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -54,13 +55,14 @@ export const Home: React.FC = () => {
       {/* Hero Section */}
       <section className="relative min-h-[85vh] md:min-h-[95vh] pt-32 md:pt-40 flex items-center justify-center overflow-hidden bg-white">
         <div className="absolute inset-0 z-0">
-          <img 
+          <ImageWithSkeleton 
             src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1920&h=1080" 
             alt="Serene coastal shoreline" 
             className="w-full h-full object-cover opacity-60"
+            wrapperClassName="w-full h-full"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent z-10" />
         </div>
         
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-8">

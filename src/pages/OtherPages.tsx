@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Mail, MessageCircle, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { EMAIL, LOCATION, WHATSAPP_NUMBER, BLOG_POSTS } from '../constants';
+import { ImageWithSkeleton } from '../components/ImageWithSkeleton';
 
 export const About: React.FC = () => (
   <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-4xl mx-auto space-y-24">
@@ -25,9 +26,9 @@ export const About: React.FC = () => (
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2 }}
-        className="aspect-video rounded-[2rem] overflow-hidden bg-brand-grey"
+        className="aspect-video rounded-[2rem] overflow-hidden bg-brand-grey w-full h-full"
       >
-        <img src="/assets/general/about-bg.png" alt="About Taaibosch" className="w-full h-full object-cover" />
+        <ImageWithSkeleton src="/assets/general/about-bg.png" alt="About Taaibosch" className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
       </motion.div>
 
       <div className="space-y-8 text-lg md:text-xl text-brand-ink/60 leading-relaxed text-left max-w-2xl mx-auto">
@@ -149,8 +150,8 @@ export const Blog: React.FC = () => (
             transition={{ delay: idx * 0.05 }}
             className="group cursor-pointer space-y-6"
           >
-            <div className="aspect-[4/3] rounded-[2rem] overflow-hidden bg-brand-grey">
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <div className="aspect-[4/3] rounded-[2rem] overflow-hidden bg-brand-grey w-full h-full">
+              <ImageWithSkeleton src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" wrapperClassName="w-full h-full" />
             </div>
             <div className="space-y-4 text-left">
               <div className="flex flex-wrap gap-2">

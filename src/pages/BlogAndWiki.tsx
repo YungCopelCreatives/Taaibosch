@@ -9,6 +9,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, BookOpen, Clock, Calendar, Bookmark, FileText, ChevronRight, Share2, CornerDownRight, HelpCircle, Heart } from 'lucide-react';
 import { WIKI_ARTICLES, EXPANDED_BLOG_POSTS } from '../data/wikiData';
 import { PRODUCTS } from '../constants';
+import { ImageWithSkeleton } from '../components/ImageWithSkeleton';
 
 export const BlogPostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -88,14 +89,12 @@ export const BlogPostDetail: React.FC = () => {
       </div>
 
       {/* Hero Image */}
-      <div className="aspect-[16/9] rounded-[2.5rem] overflow-hidden bg-brand-grey shadow-md">
-        <img 
+      <div className="aspect-[16/9] rounded-[2.5rem] overflow-hidden bg-brand-grey shadow-md w-full h-full">
+        <ImageWithSkeleton 
           src={post.image} 
           alt={post.title} 
           className="w-full h-full object-cover" 
-          onError={(e) => {
-            e.currentTarget.src = 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=1200';
-          }}
+          wrapperClassName="w-full h-full"
         />
       </div>
 
@@ -299,7 +298,7 @@ export const WikiPage: React.FC = () => {
                     to={`/product/${p.id}`}
                     className="flex items-center space-x-4 p-4 bg-white hover:bg-brand-grey border border-black/5 rounded-2xl transition-all group"
                   >
-                    <img src={p.image} alt={p.name} className="w-14 h-14 object-cover rounded-xl border border-black/5" />
+                    <ImageWithSkeleton src={p.image} alt={p.name} className="w-14 h-14 object-cover rounded-xl border border-black/5" wrapperClassName="w-14 h-14 flex-shrink-0" />
                     <div className="flex-grow">
                       <h5 className="font-medium text-sm group-hover:underline leading-snug">{p.name}</h5>
                       <p className="text-[10px] text-brand-ink/40 uppercase tracking-widest font-bold mt-0.5">{p.category}</p>

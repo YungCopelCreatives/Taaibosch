@@ -11,6 +11,7 @@ import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
 import { useCart } from '../CartContext';
 import { ProductCard } from '../components/ProductCard';
 import { ReviewSection } from '../components/ReviewSection';
+import { ImageWithSkeleton } from '../components/ImageWithSkeleton';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -92,7 +93,7 @@ export const ProductDetail: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="aspect-square rounded-[2rem] overflow-hidden bg-brand-grey"
           >
-            <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
+            <ImageWithSkeleton src={mainImage} alt={product.name} className="w-full h-full object-cover" />
           </motion.div>
           <div className="grid grid-cols-4 gap-4">
             {galleryImages.map((img, idx) => (
@@ -104,7 +105,7 @@ export const ProductDetail: React.FC = () => {
                   mainImage === img ? "border-brand-ink opacity-100" : "border-transparent opacity-40 hover:opacity-100"
                 )}
               >
-                <img src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
+                <ImageWithSkeleton src={img} alt={`${product.name} ${idx}`} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
