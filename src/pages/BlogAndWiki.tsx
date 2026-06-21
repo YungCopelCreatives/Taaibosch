@@ -82,9 +82,7 @@ export const BlogPostDetail: React.FC = () => {
             <Clock size={14} />
             <span>5 Min Read</span>
           </div>
-          <span className="hidden sm:inline border-l border-black/10 pl-6 text-brand-green-deep font-bold">
-            By {post.author || 'Taaibosch Editorial'}
-          </span>
+
         </div>
       </div>
 
@@ -252,6 +250,17 @@ export const WikiPage: React.FC = () => {
               <h3 className="font-bold text-lg leading-tight text-brand-ink">{article.name}</h3>
               <p className="text-xs text-brand-ink/40 font-mono italic">Botanical Profile Sheet</p>
             </div>
+
+            {article.image && (
+              <div className="aspect-video w-full rounded-2xl overflow-hidden bg-brand-grey border border-black/5 shadow-inner">
+                <ImageWithSkeleton 
+                  src={article.image} 
+                  alt={article.name} 
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                  wrapperClassName="w-full h-full" 
+                />
+              </div>
+            )}
 
             <div className="space-y-3">
               <div className="flex justify-between border-b border-black/5 py-1">

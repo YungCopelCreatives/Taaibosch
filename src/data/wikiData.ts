@@ -1,4 +1,8 @@
 import { BlogPost, WikiArticle } from '../types';
+// @ts-expect-error - PNG import for Vite asset
+import regeneratedImage1 from '../assets/images/regenerated_image_1781944058568.png';
+// @ts-expect-error - PNG import for Vite asset
+import regeneratedImage2 from '../assets/images/regenerated_image_1782030047445.png';
 
 export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
   'chondrus-crispus': {
@@ -14,7 +18,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'In coastal Gaelic and Caribbean traditions, Sea Moss was steeped to soothe winter chests, nourish postpartum mothers, and treat gastrointestinal inflammation. It has long been valued for its gelatinous demulcent properties.',
     scientificInsights: 'Modern laboratory panels indicate that Sea Moss is exceptionally rich in soluble dietary fibers and thyroid precursors, including diiodothyronine (DIT) and monoiodothyronine (MIT). Its high carrageenan content forms a comforting protective gel over the stomach lining, supporting gut repair and reducing bloating.',
     therapeuticAesthetics: 'For modern women, Sea Moss contains organic sulfur compounds that promote collagen synthesis, targeting facial volume, skin hydration, and hair strength. Its high mucilage density supports healthy lymphatic drainage to address under-eye puffiness and belly bloating.',
-    associatedProducts: ['1', '11', '19', '18', '5']
+    associatedProducts: ['1', '11', '19', '18', '5'],
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800'
   },
   'annona-muricata': {
     slug: 'annona-muricata',
@@ -29,7 +34,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Indigenous Amazonian tribes used infusions of soursop bark and leaves as a sedative, anti-inflammatory agent, and liver support. It was also brewed to protect against blood parasites and skin breakouts.',
     scientificInsights: 'Research shows that soursop leaves are packed with Annonaceous Acetogenins, powerful bio-active compounds that selectively inhibit mitochondrial respiration in irregular or compromised cells, protecting normal healthy tissues.',
     therapeuticAesthetics: 'Excellent for mature individuals over fifty who engage in high-intensity exercise, helping to regulate cellular cleanup (autophagy), soothe age-related joint stiffness, and bolster systemic metabolic recovery.',
-    associatedProducts: ['2', '25']
+    associatedProducts: ['2', '25'],
+    image: 'https://images.unsplash.com/photo-1595855759920-86582396756a?auto=format&fit=crop&q=80&w=800'
   },
   'arctium-lappa': {
     slug: 'arctium-lappa',
@@ -44,7 +50,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Across Traditional Chinese Medicine (Sheng Ma) and European folk healing, Burdock was the absolute "blood purifier." It was the primary treatment for chronic sebaceous congestion, eczema, boil breakouts, and fluid buildup.',
     scientificInsights: 'Burdock root contains up to 45% inulin, an outstanding prebiotic fiber that feeds beneficial bifidobacteria in the gut. The compound arctigenin has been shown to exhibit anti-inflammatory activity, lowering inflammatory markers that cause cystic facial acne.',
     therapeuticAesthetics: 'The premier beauty herb. It neutralizes systemic toxicity before it reaches the dermis, balancing oil production, tightening pore appearance, and calming active facial redness.',
-    associatedProducts: ['27']
+    associatedProducts: ['27'],
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=800'
   },
   'fucus-vesiculosus': {
     slug: 'fucus-vesiculosus',
@@ -59,7 +66,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Historically utilized for "goitre" and metabolic sluggishness. Coastal communities used seaweed baths filled with Bladderwrack to ease arthritic joints, stiff hips, and restore skin elasticity.',
     scientificInsights: 'Its high fucoidan density works as an anticoagulant, anti-inflammatory, and antioxidant. Clinical findings show that Bladderwrack-derived iodine directly binds to thyroid receptors, rising basic thyroid hormone production to increase standard calorie consumption.',
     therapeuticAesthetics: 'For mature women or active men, Bladderwrack aids joint lubrication, prevents arterial thickening, and speeds up cellular water transport to address chronic lower-abdomen water retention.',
-    associatedProducts: ['5', '24']
+    associatedProducts: ['5', '24'],
+    image: 'https://images.unsplash.com/photo-1518877593221-1f28583780b4?auto=format&fit=crop&q=80&w=800'
   },
   'tabebuia-impetiginosa': {
     slug: 'tabebuia-impetiginosa',
@@ -74,7 +82,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Often brewed as "Divine Tea" by the Incas and Guarani people. It was used to combat severe gut fevers, abdominal bloating, skin molds, and systemic bacterial infections.',
     scientificInsights: 'Ample research proves that the compounds lapachol and beta-lapachone directly disrupt the cell membranes of Candida albicans and other opportunistic yeasts without harming normal gut microbiomes, stabilizing the digestive tract.',
     therapeuticAesthetics: 'Crucial for flat-stomach goals. By eliminating fungal gas emissions and candida-driven yeast fermentation in the small intestine, it rapidly eliminates intestinal bloating and reduces sugar cravings.',
-    associatedProducts: ['4', '25']
+    associatedProducts: ['4', '25'],
+    image: 'https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?auto=format&fit=crop&q=80&w=800'
   },
   'urtica-dioica': {
     slug: 'urtica-dioica',
@@ -89,7 +98,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Traditional healers utilized Nettle root for dynamic male energy, kidney flow, and relieving urinary urgency. The leaves were steeped as a daily multi-mineral tonic for strength, vitality, and joint mobility.',
     scientificInsights: 'Studies confirm that Nettle root lignans bind to Sex Hormone-Binding Globulin (SHBG) in place of testosterone, preventing the lockdown of active testosterone. This leaves more free testosterone in the system to support male heart health, bone density, muscle mass, and prevent prostate hyperplasia (DHT locking).',
     therapeuticAesthetics: 'For men over forty, Nettle root supports healthy urinary flow, controls nocturnal trips, and aids high-nitrogen muscle and connective tissue repair.',
-    associatedProducts: ['10']
+    associatedProducts: ['10'],
+    image: 'https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&q=80&w=800'
   },
   'taraxacum-officinale': {
     slug: 'taraxacum-officinale',
@@ -104,7 +114,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Ancient Greek, Roman, and Arabian physicians used Dandelion teas to treat jaundice, sluggish digestion, gallbladder congestion, and skin breakouts.',
     scientificInsights: 'The bitter sesquiterpene lactones in Dandelion trigger salivary and gastric juices, optimizing digestion and lipid breakdown in the liver. It acts as an exceptionally clean diuretic, removing excess water weight while replenishing the body\'s natural potassium stores.',
     therapeuticAesthetics: 'The key to flat stomach definition. It reduces hepatic stagnation and shifts subcutaneous water weight out of the tissue, instantly revealing abdominal definition.',
-    associatedProducts: ['26']
+    associatedProducts: ['26'],
+    image: 'https://images.unsplash.com/photo-1533294455219-c637409f8749?auto=format&fit=crop&q=80&w=800'
   },
   'rumex-crispus': {
     slug: 'rumex-crispus',
@@ -119,7 +130,8 @@ export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
     traditionalUse: 'Traditionally brewed as a tonic to treat anemia, fatigue, dry skin conditions, and chronic constipation.',
     scientificInsights: 'Its anthraquinone content stimulates smooth bowel peristalsis for effective waste elimination. Because it contains plant-bound iron, it integrates directly with the body\'s organic heme receptors, boosting cellular oxygenation and overall body warmth.',
     therapeuticAesthetics: 'Yellow Dock targets pale skin tones, dark under-eye circles, and cold extremities, restoring a vibrant flush of localized oxygen and a natural glow.',
-    associatedProducts: ['7']
+    associatedProducts: ['7'],
+    image: 'https://images.unsplash.com/photo-1541943187604-e2226f30e4b0?auto=format&fit=crop&q=80&w=800'
   }
 };
 
@@ -128,7 +140,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '1',
     title: 'The Magic of Seamoss: Why Your Body Needs It',
     preview: 'Discover the 92 minerals packed into this ocean superfood and how it can transform your health.',
-    image: '/assets/blog/seamoss-magic.png',
+    image: regeneratedImage1,
     topics: ['Seamoss education', 'Herbal benefits'],
     date: 'June 15, 2026',
     author: 'Taaibosch Editorial Board',
@@ -146,7 +158,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '2',
     title: '5 Natural Ways to Boost Your Immunity This Winter',
     preview: 'Simple, effective herbal remedies to keep your immune system strong during the colder months.',
-    image: '/assets/blog/immunity-boost.png',
+    image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800',
     topics: ['Immunity', 'Natural wellness tips'],
     date: 'May 28, 2026',
     author: 'Dr. Linda Taaibosch',
@@ -167,7 +179,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '3',
     title: 'Understanding Adaptogens: Ashwagandha and Beyond',
     preview: 'Learn how adaptogenic herbs help your body adapt to stress and restore balance.',
-    image: '/assets/blog/adaptogens.png',
+    image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80&w=800',
     topics: ['Herbal benefits', 'Natural wellness tips'],
     date: 'April 12, 2026',
     author: 'Mpho Taaibosch',
@@ -185,7 +197,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '4',
     title: 'Ageless Vitality: Soursop and Sea Moss for Active Women Over 50',
     preview: 'How mature female athletes can harness tropical leaves and marine minerals for bone, cell, and joint performance.',
-    image: '/assets/blog/ageless-vitality.png',
+    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800',
     topics: ['Mature women', 'Fitness', 'Soursop'],
     date: 'June 18, 2026',
     author: 'Taaibosch Editorial Board',
@@ -203,7 +215,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '5',
     title: 'Refueling the Mature Frame: Mineral Density and Joint Preservation',
     preview: 'A scientific look at joint cartilage lubrication, cellular water transport, and bone strength with brown seaweeds.',
-    image: '/assets/blog/mature-frame.png',
+    image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=800',
     topics: ['Joint care', 'Bone density', 'Bladderwrack'],
     date: 'June 17, 2026',
     author: 'Dr. Linda Taaibosch',
@@ -221,7 +233,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '6',
     title: 'The Botanical Radiance Protocol: Cleansing Blemishes from the Inside Out',
     preview: 'Why topical face washes fail when blood filters are congested, and how Burdock targets facial volume and skin health.',
-    image: '/assets/blog/radiance-protocol.png',
+    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800',
     topics: ['Facial health', 'Clear skin', 'Burdock'],
     date: 'June 16, 2026',
     author: 'Taaibosch Beauty Team',
@@ -239,7 +251,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '7',
     title: 'Beyond Calorie Deficits: Bitter Herbs and Yeast Control for a Flatter Stomach',
     preview: 'Inside Candida overgrowth, stomach bloating, and natural water retention sweeps.',
-    image: '/assets/blog/flat-stomach.png',
+    image: regeneratedImage2,
     topics: ['Flat tummy', 'Gut health', 'Anti-bloat'],
     date: 'June 15, 2026',
     author: 'Mpho Taaibosch',
@@ -257,7 +269,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '8',
     title: 'The Prostate Sentinel: Stinging Nettle and Zinc-Rich Compounds for Men\'s Longevity',
     preview: 'How men over 40 can defend their prostate tissue, maintain free testosterone, and improve nighttime sleep.',
-    image: '/assets/blog/prostate-sentinel.png',
+    image: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&q=80&w=800',
     topics: ['Men\'s health', 'Prostate', 'Nettle'],
     date: 'June 14, 2026',
     author: 'Taaibosch Editorial Board',
@@ -275,7 +287,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '9',
     title: 'Optimal Ingress: Botanical Heart Pillars and Arterial Tone for Men Over 35',
     preview: 'A masterclass on vascular elasticity, antioxidant defense, and oxygenation with Hibiscus and Yellow Dock.',
-    image: '/assets/blog/heart-pillars.png',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800',
     topics: ['Men\'s health', 'Cardiology', 'Hibiscus'],
     date: 'June 13, 2026',
     author: 'Dr. Linda Taaibosch',
@@ -293,7 +305,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '10',
     title: 'The Estrogen & Mineral Axis: How Sea Moss Rebuilds Female Tissue Integrity',
     preview: 'How our premium sea moss gel aids skin elasticity, biological collagen, and natural moisture balance.',
-    image: '/assets/blog/estrogen-axis.png',
+    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=800',
     topics: ['Females', 'Collagen', 'Endocrine'],
     date: 'June 12, 2026',
     author: 'Taaibosch Beauty Team',
@@ -311,7 +323,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '11',
     title: 'Peaking the Machine: Overcoming Afternoon Fatigue with the Sea-Mineral Axis',
     preview: 'How busy men can overcome thyroid lethargy, maximize training energy, and increase metabolic outputs.',
-    image: '/assets/blog/peaking-machine.png',
+    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=800',
     topics: ['Men\'s health', 'Energy', 'Thyroid'],
     date: 'June 11, 2026',
     author: 'Mpho Taaibosch',
@@ -329,7 +341,7 @@ export const EXPANDED_BLOG_POSTS: BlogPost[] = [
     id: '12',
     title: 'Valerian & Nettle: Deep Sleep Architecture and Cortisol Regulation for Men',
     preview: 'How active men can lower cortisol at night, build muscle, and optimize sleep cycles.',
-    image: '/assets/blog/sleep-architecture.png',
+    image: 'https://images.unsplash.com/photo-1511295742364-927943c308ee?auto=format&fit=crop&q=80&w=800',
     topics: ['Men\'s health', 'Sleep', 'Cortisol'],
     date: 'June 10, 2026',
     author: 'Taaibosch Editorial Board',

@@ -35,6 +35,7 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         loading="lazy"
+        referrerPolicy="no-referrer"
         {...props}
       />
 

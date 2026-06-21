@@ -66,6 +66,7 @@ export interface WikiArticle {
   scientificInsights: string;
   therapeuticAesthetics: string; // Detail on skin, gut or vitality
   associatedProducts: string[]; // Product IDs
+  image: string;
 }
 
 export interface Review {
