@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Star, MessageSquare, Send, User, Trash2 } from 'lucide-react';
+import { Star, MessageSquare, Send, User, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Review } from '../types';
 import { clsx, type ClassValue } from 'clsx';
@@ -17,6 +17,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [filter, setFilter] = useState<'All' | 'Good' | 'Bad'>('All');
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [submitState, setSubmitState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('');
   const [newReview, setNewReview] = useState({
     userName: '',
     rating: 5,
@@ -26,8 +28,9 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
   const fetchReviews = async () => {
     try {
       const response = await fetch('/api/reviews');
+      if (!response.ok) throw new Error(String(response.status));
       const data = await response.json();
-      setReviews(data.filter((r: Review) => r.productId === productId));
+      setReviews(Array.isArray(data) ? data.filter((r: Review) => r.productId === productId) : []);
     } catch (error) {
       console.error('Failed to fetch reviews:', error);
     }
@@ -47,48 +50,23 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
     e.preventDefault();
     if (!newReview.userName || !newReview.comment) return;
 
-    const review: Review = {
-      id: `review_${Date.now()}`,
-      productId,
-      userName: newReview.userName,
-      rating: newReview.rating,
-      comment: newReview.comment,
-      date: new Date().toISOString().split('T')[0]
-    };
-
+    setSubmitState('sending');
     try {
-      await fetch('/api/reviews', {
+      const res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(review)
+        body: JSON.stringify({ productId, ...newReview }),
       });
-      
-      // Store the ID of reviews created by this user in this session to allow deletion
-      const myReviews = JSON.parse(localStorage.getItem('my_reviews') || '[]');
-      localStorage.setItem('my_reviews', JSON.stringify([...myReviews, review.id]));
-      
-      fetchReviews();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not send your review.');
+      setSubmitState('sent');
+      setSubmitMessage('Thank you! Your review will appear once it has been approved.');
       setNewReview({ userName: '', rating: 5, comment: '' });
       setIsFormOpen(false);
     } catch (error) {
-      console.error('Failed to submit review:', error);
+      setSubmitState('error');
+      setSubmitMessage(error instanceof Error ? error.message : 'Could not send your review.');
     }
-  };
-
-  const handleDelete = async (reviewId: string) => {
-    try {
-      await fetch(`/api/reviews/${reviewId}`, {
-        method: 'DELETE'
-      });
-      fetchReviews();
-    } catch (error) {
-      console.error('Failed to delete review:', error);
-    }
-  };
-
-  const isMyReview = (reviewId: string) => {
-    const myReviews = JSON.parse(localStorage.getItem('my_reviews') || '[]');
-    return myReviews.includes(reviewId);
   };
 
   const averageRating = reviews.length > 0 
@@ -168,6 +146,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                         key={i}
                         type="button"
                         onClick={() => setNewReview({ ...newReview, rating: i + 1 })}
+                        aria-label={`${i + 1} star${i ? 's' : ''}`}
                         className="text-yellow-500 transition-transform hover:scale-110"
                       >
                         <Star size={24} fill={i < newReview.rating ? "currentColor" : "none"} />
@@ -196,7 +175,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
                 </button>
                 <button 
                   type="submit"
-                  className="px-10 py-3 bg-brand-green-deep text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center space-x-2 shadow-md"
+                  disabled={submitState === 'sending'}
+                  className="disabled:opacity-60 px-10 py-3 bg-brand-green-deep text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center space-x-2 shadow-md"
                 >
                   <span>Submit Review</span>
                   <Send size={14} />
@@ -206,6 +186,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {submitMessage && !isFormOpen && (
+        <div role="status" className={cn('flex items-center gap-3 p-4 rounded-2xl text-sm', submitState === 'error' ? 'bg-red-50 text-red-700' : 'bg-brand-green-light text-brand-green-deep')}>
+          {submitState !== 'error' && <Check size={16} />}
+          {submitMessage}
+        </div>
+      )}
+      {submitState === 'error' && isFormOpen && <p role="alert" className="text-sm text-red-600">{submitMessage}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {filteredReviews.length > 0 ? (
@@ -218,14 +206,6 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
               transition={{ delay: idx * 0.05 }}
               className="p-8 bg-white rounded-[2rem] border border-black/5 space-y-4 relative group"
             >
-              {isMyReview(review.id) && (
-                <button 
-                  onClick={() => handleDelete(review.id)}
-                  className="absolute top-6 right-6 p-2 text-brand-ink/20 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
-                >
-                  <Trash2 size={16} />
-                </button>
-              )}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-brand-grey rounded-full flex items-center justify-center text-brand-ink/20">
@@ -255,7 +235,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ productId }) => {
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto text-brand-ink/10">
               <MessageSquare size={32} />
             </div>
-            <p className="text-brand-ink/40 text-sm font-medium">No reviews found for this filter.</p>
+            <p className="text-brand-ink/40 text-sm font-medium">{reviews.length ? 'No reviews match this filter.' : 'No reviews yet. Be the first to share your experience.'}</p>
           </div>
         )}
       </div>

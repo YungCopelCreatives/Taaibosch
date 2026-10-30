@@ -5,10 +5,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, Home, Store, Info, Phone, X, Menu, BookOpen } from 'lucide-react';
+import { Search, Heart, ShoppingCart, Home, Store, Info, Phone, X, Menu, BookOpen, MessageCircle, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCart } from '../CartContext';
-import { PRODUCTS } from '../constants';
+import { PRODUCTS, EMAIL, whatsappLink } from '../constants';
 import { Product } from '../types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -70,7 +70,7 @@ export const Navbar: React.FC = () => {
           >
             <Link to="/" className="flex items-center">
               <img 
-                src="/assets/ORGANIC STORE LOGO.svg" 
+                src="/assets/logo.webp" 
                 alt="Taaibosch Organics" 
                 className="h-8 w-auto" 
                 onError={(e) => {
@@ -110,12 +110,14 @@ export const Navbar: React.FC = () => {
           <div className="glass px-2 py-2 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 flex items-center space-x-1">
             <button 
               onClick={() => setIsSearchOpen(true)} 
+              aria-label="Search"
               className="p-3 hover:bg-brand-grey rounded-full transition-colors text-brand-ink/60 hover:text-brand-ink"
             >
               <Search size={18} />
             </button>
             <Link 
               to="/wishlist" 
+              aria-label="Wishlist"
               className="p-3 hover:bg-brand-grey rounded-full transition-colors relative text-brand-ink/60 hover:text-brand-ink"
             >
               <Heart size={18} />
@@ -125,6 +127,7 @@ export const Navbar: React.FC = () => {
             </Link>
             <Link 
               to="/cart" 
+              aria-label={`Cart, ${cartCount} items`}
               className="p-3 bg-brand-green-deep text-white rounded-full transition-transform hover:scale-105 relative"
             >
               <ShoppingCart size={18} />
@@ -145,7 +148,7 @@ export const Navbar: React.FC = () => {
         <div className="glass px-4 py-3 rounded-2xl shadow-lg border border-brand-green-moss/20 flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <img 
-              src="/assets/ORGANIC STORE LOGO.svg" 
+              src="/assets/logo.webp" 
               alt="Taaibosch Organics" 
               className="h-6 w-auto" 
               onError={(e) => {
@@ -162,7 +165,7 @@ export const Navbar: React.FC = () => {
             />
           </Link>
           <div className="flex items-center space-x-2">
-            <Link to="/wishlist" className="relative p-2 text-brand-ink/60">
+            <Link to="/wishlist" aria-label="Wishlist" className="relative p-2 text-brand-ink/60">
               <Heart size={20} />
               {wishlist.length > 0 && (
                 <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-brand-ink rounded-full" />
@@ -170,6 +173,7 @@ export const Navbar: React.FC = () => {
             </Link>
             <button 
               onClick={() => setIsMenuOpen(true)}
+              aria-label="Open menu"
               className="p-2 bg-brand-green-deep text-white rounded-xl transition-colors"
             >
               <Menu size={20} />
@@ -198,7 +202,7 @@ export const Navbar: React.FC = () => {
             >
               <div className="p-6 flex items-center justify-between border-b border-black/5">
                 <span className="font-semibold tracking-tight">Menu</span>
-                <button onClick={() => setIsMenuOpen(false)} className="p-2 hover:bg-brand-grey rounded-full transition-colors">
+                <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu" className="p-2 hover:bg-brand-grey rounded-full transition-colors">
                   <X size={24} />
                 </button>
               </div>
@@ -241,11 +245,11 @@ export const Navbar: React.FC = () => {
               <div className="p-8 border-t border-black/5 bg-brand-grey/30">
                 <p className="text-xs text-brand-ink/40 mb-4 font-medium">Connect with us</p>
                 <div className="flex space-x-4">
-                  <a href="#" className="p-3 bg-white rounded-xl shadow-sm hover:scale-110 transition-transform">
-                    <Phone size={18} />
+                  <a href={whatsappLink()} target="_blank" rel="noreferrer" aria-label="WhatsApp us" className="p-3 bg-white rounded-xl shadow-sm hover:scale-110 transition-transform text-[#128C7E]">
+                    <MessageCircle size={18} />
                   </a>
-                  <a href="#" className="p-3 bg-white rounded-xl shadow-sm hover:scale-110 transition-transform">
-                    <Info size={18} />
+                  <a href={`mailto:${EMAIL}`} aria-label="Email us" className="p-3 bg-white rounded-xl shadow-sm hover:scale-110 transition-transform">
+                    <Mail size={18} />
                   </a>
                 </div>
               </div>
@@ -259,6 +263,7 @@ export const Navbar: React.FC = () => {
         <div className="glass px-2 py-2 rounded-[2.5rem] shadow-[0_12px_40px_rgba(45,90,39,0.18)] border border-brand-green-moss/20 flex items-center justify-between">
           <Link 
             to="/" 
+            aria-label="Home"
             className={cn(
               "flex flex-col items-center p-3.5 rounded-full transition-all duration-300",
               location.pathname === "/" ? "text-brand-green-deep" : "text-brand-ink/40"
@@ -269,6 +274,7 @@ export const Navbar: React.FC = () => {
           
           <Link 
             to="/shop" 
+            aria-label="Shop"
             className={cn(
               "flex flex-col items-center p-3.5 rounded-full transition-all duration-300",
               location.pathname === "/shop" ? "text-brand-green-deep" : "text-brand-ink/40"
@@ -280,6 +286,7 @@ export const Navbar: React.FC = () => {
           {/* Centered Search Action */}
           <button 
             onClick={() => setIsSearchOpen(true)}
+            aria-label="Search"
             className="flex items-center justify-center -translate-y-4 w-14 h-14 bg-brand-green-deep text-white rounded-full shadow-[0_8px_20px_rgba(45,90,39,0.3)] transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <Search size={24} />
@@ -287,6 +294,7 @@ export const Navbar: React.FC = () => {
 
           <Link 
             to="/blog" 
+            aria-label="Blog"
             className={cn(
               "flex flex-col items-center p-3.5 rounded-full transition-all duration-300",
               location.pathname === "/blog" ? "text-brand-green-deep" : "text-brand-ink/40"
@@ -297,6 +305,7 @@ export const Navbar: React.FC = () => {
           
           <Link 
             to="/cart"
+            aria-label={`Cart, ${cartCount} items`}
             className={cn(
               "flex flex-col items-center p-3.5 relative rounded-full transition-all duration-300",
               location.pathname === '/cart' ? "text-brand-green-deep" : "text-brand-ink/40"
@@ -324,7 +333,7 @@ export const Navbar: React.FC = () => {
             <div className="max-w-3xl mx-auto w-full px-6 pt-20">
               <div className="flex items-center justify-between mb-12">
                 <h2 className="text-3xl font-medium tracking-tight">Search</h2>
-                <button onClick={() => setIsSearchOpen(false)} className="p-2 hover:bg-brand-grey rounded-full transition-colors">
+                <button onClick={() => setIsSearchOpen(false)} aria-label="Close search" className="p-2 hover:bg-brand-grey rounded-full transition-colors">
                   <X size={24} />
                 </button>
               </div>

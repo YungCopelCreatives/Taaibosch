@@ -7,7 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Plus } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Product } from '../types';
+import { Product, isInStock } from '../types';
 import { useCart } from '../CartContext';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -24,6 +24,8 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart, wishlist, toggleWishlist } = useCart();
   const isWishlisted = wishlist.includes(product.id);
+  const inStock = isInStock(product);
+  const fewLeft = inStock && typeof product.stock === 'number' && product.stock <= 5;
 
   return (
     <motion.div 
@@ -44,13 +46,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         
         {/* Badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
-          {product.isBestSeller && (
+          {!inStock && (
+            <span className="px-3 py-1 bg-brand-ink text-white text-[10px] font-semibold uppercase tracking-widest rounded-full shadow-sm">Sold out</span>
+          )}
+          {fewLeft && (
+            <span className="px-3 py-1 bg-amber-50 text-amber-800 text-[10px] font-semibold uppercase tracking-widest rounded-full shadow-sm">Only {product.stock} left</span>
+          )}
+          {inStock && product.isBestSeller && (
             <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-widest rounded-full shadow-sm flex items-center space-x-1.5">
               <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
               <span>High Demand</span>
             </span>
           )}
-          {product.isTrending && (
+          {inStock && product.isTrending && (
             <span className="px-3 py-1 bg-brand-green-deep text-white text-[10px] font-semibold uppercase tracking-widest rounded-full shadow-sm">
               Frequently Ordered
             </span>
@@ -60,6 +68,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Wishlist Button */}
         <button 
           onClick={() => toggleWishlist(product.id)}
+          aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Save ${product.name} to wishlist`}
+          aria-pressed={isWishlisted}
           className={cn(
             "absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm transition-all duration-300",
             isWishlisted ? "bg-red-50 text-red-500" : "bg-white/90 text-brand-ink/40 hover:text-brand-green-deep"
@@ -69,12 +79,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </button>
 
         {/* Quick Add Button (Desktop) */}
-        <button 
+        {inStock && <button 
           onClick={() => addToCart(product)}
-          className="absolute bottom-4 right-4 p-3 bg-brand-green-deep text-white rounded-full translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hidden md:flex items-center justify-center shadow-lg"
+          aria-label={`Add ${product.name} to cart`}
+          className="absolute bottom-4 right-4 p-3 bg-brand-green-deep text-white rounded-full translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 transition-all duration-300 hidden md:flex items-center justify-center shadow-lg"
         >
           <Plus size={20} />
-        </button>
+        </button>}
       </div>
 
       <div className="flex-grow">
@@ -97,10 +108,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Add to Cart (Mobile) */}
       <button 
         onClick={() => addToCart(product)}
-        className="mt-4 w-full py-3 bg-brand-grey text-brand-green-deep text-xs font-semibold uppercase tracking-widest rounded-xl hover:bg-brand-green-deep hover:text-white transition-all md:hidden flex items-center justify-center space-x-2"
+        disabled={!inStock}
+        className="disabled:opacity-40 disabled:pointer-events-none mt-4 w-full py-3 bg-brand-grey text-brand-green-deep text-xs font-semibold uppercase tracking-widest rounded-xl hover:bg-brand-green-deep hover:text-white transition-all md:hidden flex items-center justify-center space-x-2"
       >
         <ShoppingCart size={14} />
-        <span>Add to Cart</span>
+        <span>{inStock ? 'Add to Cart' : 'Sold out'}</span>
       </button>
     </motion.div>
   );

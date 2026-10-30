@@ -1,14 +1,16 @@
 {
-  "name": "react-example",
+  "name": "taaibosch-organics",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build",
-    "preview": "vite preview",
-    "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "dev": "tsx server.ts --dev",
+    "build": "vite build && node scripts/build-server.mjs",
+    "start": "node dist-server/server.js",
+    "preview": "npm run build && npm start",
+    "clean": "rm -rf dist dist-server",
+    "lint": "tsc --noEmit",
+    "build:vercel": "vite build && node scripts/build-vercel.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -33,5 +35,9 @@
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
-  }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "dist-server/server.js"
 }

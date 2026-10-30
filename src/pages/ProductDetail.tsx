@@ -5,9 +5,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Heart, ShoppingCart, ArrowLeft, Plus, Minus, Share2, Leaf, ShieldCheck, MessageCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Heart, ShoppingCart, ArrowLeft, Plus, Minus, Share2, Leaf, ShieldCheck, MessageCircle, Check, Truck, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
+import { PRODUCTS, whatsappLink, FREE_DELIVERY_THRESHOLD } from '../constants';
+import { isInStock } from '../types';
+import { usePageMeta } from '../lib/usePageMeta';
 import { useCart } from '../CartContext';
 import { ProductCard } from '../components/ProductCard';
 import { ReviewSection } from '../components/ReviewSection';
@@ -29,6 +31,8 @@ export const ProductDetail: React.FC = () => {
 
   const product = PRODUCTS.find(p => p.id === id);
   const isWishlisted = wishlist.includes(id || '');
+  const [shared, setShared] = useState(false);
+  usePageMeta(product?.name, product ? `${product.headline ?? product.hook ?? ''} R${product.price}. ${product.summary}` : undefined);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,16 +66,30 @@ export const ProductDetail: React.FC = () => {
     ]}
   ];
 
-  const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+  const inStock = isInStock(product);
+  const maxQty = typeof product.stock === 'number' ? Math.max(1, Math.min(20, product.stock)) : 20;
+  const handleAddToCart = () => addToCart(product, quantity);
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    navigate('/cart');
   };
 
   const handleWhatsAppOrder = () => {
     const message = `Hello, I'm interested in ordering ${quantity} x ${product.name} (R${product.price * quantity}).`;
-    const url = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(whatsappLink(message), '_blank', 'noopener');
+  };
+
+  const handleShare = async () => {
+    const data = { title: product.name, text: product.headline ?? product.summary, url: window.location.href };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else {
+        await navigator.clipboard.writeText(data.url);
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      }
+    } catch { /* user closed the share sheet */ }
   };
 
   return (
@@ -117,17 +135,19 @@ export const ProductDetail: React.FC = () => {
             <div className="flex items-center justify-between">
               <p className="text-xs uppercase tracking-[0.3em] font-bold text-brand-ink/40">{product.category}</p>
               <div className="flex items-center space-x-4">
-                <button onClick={() => toggleWishlist(product.id)} className={cn("p-2 rounded-full transition-all", isWishlisted ? "text-red-500 bg-red-50" : "text-brand-ink/40 hover:text-brand-ink bg-brand-grey")}>
+                <button onClick={() => toggleWishlist(product.id)} aria-label={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'} aria-pressed={isWishlisted} className={cn("p-2 rounded-full transition-all", isWishlisted ? "text-red-500 bg-red-50" : "text-brand-ink/40 hover:text-brand-ink bg-brand-grey")}>
                   <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
                 </button>
-                <button className="p-2 rounded-full text-brand-ink/40 hover:text-brand-ink bg-brand-grey transition-all">
-                  <Share2 size={20} />
+                <button onClick={handleShare} aria-label="Share this product" className="p-2 rounded-full text-brand-ink/40 hover:text-brand-ink bg-brand-grey transition-all">
+                  {shared ? <Check size={20} className="text-brand-green-deep" /> : <Share2 size={20} />}
                 </button>
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight">{product.name}</h1>
             {product.headline && <p className="text-lg font-medium text-brand-ink/80 italic">{product.headline}</p>}
             <p className="text-2xl font-medium">R{product.price}</p>
+            {!inStock && <p className="inline-block px-3 py-1 rounded-full bg-brand-ink text-white text-[10px] font-bold uppercase tracking-widest">Sold out · WhatsApp us to be notified</p>}
+            {inStock && typeof product.stock === 'number' && product.stock <= 5 && <p className="text-sm font-semibold text-amber-700">Only {product.stock} left in stock</p>}
           </div>
 
           <div className="space-y-4">
@@ -157,13 +177,15 @@ export const ProductDetail: React.FC = () => {
                 <div className="flex items-center bg-brand-grey rounded-full p-1">
                   <button 
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    aria-label="Decrease quantity"
                     className="p-3 hover:bg-white rounded-full transition-all"
                   >
                     <Minus size={18} />
                   </button>
                   <span className="w-12 text-center font-bold">{quantity}</span>
                   <button 
-                    onClick={() => setQuantity(q => q + 1)}
+                    onClick={() => setQuantity(q => Math.min(maxQty, q + 1))}
+                    aria-label="Increase quantity"
                     className="p-3 hover:bg-white rounded-full transition-all"
                   >
                     <Plus size={18} />
@@ -171,19 +193,28 @@ export const ProductDetail: React.FC = () => {
                 </div>
                 <button 
                   onClick={handleAddToCart}
-                  className="flex-grow py-5 bg-brand-grey text-brand-ink border border-brand-ink/10 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-brand-ink hover:text-white transition-all flex items-center justify-center space-x-3"
+                  disabled={!inStock}
+                  className="disabled:opacity-40 disabled:cursor-not-allowed flex-grow py-5 bg-white text-brand-green-deep border-2 border-brand-green-deep rounded-full text-sm font-bold uppercase tracking-widest hover:bg-brand-green-light transition-all flex items-center justify-center space-x-3"
                 >
                   <ShoppingCart size={20} />
                   <span>Add to Cart</span>
                 </button>
               </div>
               <button 
-                onClick={handleWhatsAppOrder}
-                className="w-full py-5 bg-[#25D366] text-white rounded-full text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center space-x-3 animate-pulse"
+                onClick={handleBuyNow}
+                disabled={!inStock}
+                className="disabled:opacity-50 disabled:cursor-not-allowed w-full py-5 bg-brand-green-deep text-white rounded-full text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center space-x-3 shadow-lg shadow-brand-green-deep/20"
               >
-                <MessageCircle size={20} fill="currentColor" />
-                <span>Order via WhatsApp</span>
+                <Lock size={18} />
+                <span>{inStock ? `Buy Now · R${product.price * quantity}` : 'Sold out'}</span>
               </button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-x-6 gap-y-2 text-xs text-brand-ink/50">
+                <span className="flex items-center gap-1.5"><Truck size={14} /> {FREE_DELIVERY_THRESHOLD > 0 ? `Free delivery over R${FREE_DELIVERY_THRESHOLD}` : 'Delivery across South Africa'}</span>
+                <span className="flex items-center gap-1.5"><ShieldCheck size={14} /> Secure card payment</span>
+                <button onClick={handleWhatsAppOrder} className="flex items-center gap-1.5 text-[#128C7E] font-semibold hover:underline">
+                  <MessageCircle size={14} /> Order via WhatsApp
+                </button>
+              </div>
               
               <div className="bg-brand-grey/50 p-4 rounded-2xl border border-black/5 text-center mt-3">
                 <p className="text-[10px] text-brand-ink/50 leading-relaxed font-semibold">

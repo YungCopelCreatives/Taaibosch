@@ -5,27 +5,27 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, Mail, MapPin, ArrowRight } from 'lucide-react';
-import { EMAIL, LOCATION, WHATSAPP_NUMBER } from '../constants';
+import { MessageCircle, Mail, MapPin, ArrowRight, Lock } from 'lucide-react';
+import { EMAIL, LOCATION, WHATSAPP_NUMBER, whatsappLink } from '../constants';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-brand-grey pt-20 pb-24 md:pb-12 px-6 border-t border-black/5">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
         <div className="space-y-6">
           <Link to="/" className="flex items-center">
-            <img src="/assets/ORGANIC STORE LOGO.svg" alt="Taaibosch Organics" className="h-10 w-auto" />
+            <img src="/assets/logo.webp" alt="Taaibosch Organics" className="h-10 w-auto" />
           </Link>
           <p className="text-sm text-brand-ink/60 leading-relaxed max-w-xs">
             A modern herbal wellness brand focused on natural healing, daily vitality, and longevity.
           </p>
           <div className="flex space-x-4">
-            <a href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`} target="_blank" rel="noreferrer" className="p-2 bg-white rounded-full hover:bg-brand-green-deep hover:text-white transition-all shadow-sm">
+            <a href={whatsappLink()} target="_blank" rel="noreferrer" aria-label="WhatsApp us" className="p-2 bg-white rounded-full hover:bg-brand-green-deep hover:text-white transition-all shadow-sm">
               <MessageCircle size={18} />
             </a>
-            <a href={`mailto:${EMAIL}`} className="p-2 bg-white rounded-full hover:bg-brand-green-deep hover:text-white transition-all shadow-sm">
+            <a href={`mailto:${EMAIL}`} aria-label="Email us" className="p-2 bg-white rounded-full hover:bg-brand-green-deep hover:text-white transition-all shadow-sm">
               <Mail size={18} />
             </a>
           </div>
@@ -52,6 +52,12 @@ export const Footer: React.FC = () => {
             </li>
             <li>
               <Link to="/delivery-and-shipping" className="hover:underline transition-all block">Delivery & Shipping</Link>
+            </li>
+            <li>
+              <Link to="/returns" className="hover:underline transition-all block">Returns & Refunds</Link>
+            </li>
+            <li>
+              <Link to="/terms" className="hover:underline transition-all block">Terms of Sale</Link>
             </li>
             <li>
               <Link to="/privacy-policy" className="hover:underline transition-all block">Privacy Policy</Link>
@@ -91,7 +97,7 @@ export const Footer: React.FC = () => {
               Looking to resell our products? Join a growing community bringing natural wellness to more people.
             </p>
             <a 
-              href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=Hello, I am interested in reselling Taaibosch Organics products.`}
+              href={whatsappLink('Hello, I am interested in reselling Taaibosch Organics products.')}
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-between w-full py-3 px-4 bg-brand-green-deep text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md"
@@ -106,6 +112,9 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto pt-8 border-t border-black/5 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
         <p className="text-[10px] uppercase tracking-widest font-medium text-brand-ink/40">
           © {currentYear} Taaibosch Organics. All rights reserved.
+        </p>
+        <p className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-medium text-brand-ink/40">
+          <Lock size={12} /> Secure card payments by Yoco
         </p>
         <p className="text-[10px] uppercase tracking-widest font-medium text-brand-ink/40">
           Designed by Yung Copel Creative Agency
