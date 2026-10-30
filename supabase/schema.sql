@@ -109,3 +109,9 @@ alter table public.secrets enable row level security;
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('product-images', 'product-images', true, 5242880, array['image/jpeg','image/png','image/webp'])
 on conflict (id) do nothing;
+
+-- Newer Supabase projects don't expose new tables to the API automatically.
+-- Only the website server (service role) gets access; the public keys stay locked out.
+grant usage on schema public to service_role;
+grant select, insert, update, delete on public.products, public.settings, public.orders, public.reviews, public.admin_users, public.secrets to service_role;
+grant execute on function public.adjust_stock(text, integer) to service_role;
