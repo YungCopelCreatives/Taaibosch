@@ -50,7 +50,9 @@ export async function yocoWebhookHandler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
   const raw = await req.text();
   try {
-    if (!verifyYocoWebhook(req.headers, raw)) return json({ error: 'Invalid signature' }, 403);
+    // Secret from the hosting settings, or the one saved by Dashboard > Settings > Payments > Connect Yoco
+    const secret = process.env.YOCO_WEBHOOK_SECRET || (await db().getSecret(`yoco_webhook_secret_${isTestMode() ? 'test' : 'live'}`)) || undefined;
+    if (!verifyYocoWebhook(req.headers, raw, secret)) return json({ error: 'Invalid signature' }, 403);
   } catch (e) {
     console.error('[webhook]', e);
     return json({ error: 'Webhook not configured' }, 500);

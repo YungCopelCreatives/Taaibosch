@@ -55,6 +55,9 @@ export interface Db {
   updateAdmin(id: string, patch: Partial<StoredAdmin>): Promise<StoredAdmin | null>;
   // files
   uploadImage(name: string, bytes: Uint8Array, contentType: string): Promise<string>;
+  // server-only values (e.g. the Yoco webhook secret). Never sent to browsers.
+  getSecret(key: string): Promise<string | null>;
+  setSecret(key: string, value: string): Promise<void>;
 }
 
 // ---------------------------------------------------------------- Supabase
@@ -263,6 +266,17 @@ const supabaseDb: Db = {
     if (!res.ok) throw new Error(`Upload failed: ${res.status} ${await res.text()}`);
     return `${sbUrl()}/storage/v1/object/public/product-images/${objectPath}`;
   },
+  async getSecret(key) {
+    const { data } = await rest(`secrets?key=eq.${q(key)}&select=value`);
+    return data?.[0]?.value ?? null;
+  },
+  async setSecret(key, value) {
+    await rest('secrets?on_conflict=key', {
+      method: 'POST',
+      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ key, value, updated_at: new Date().toISOString() }),
+    });
+  },
 };
 
 // ---------------------------------------------------------------- Local JSON (development)
@@ -273,9 +287,11 @@ interface LocalData {
   orders: AdminOrder[];
   reviews: AdminReview[];
   admins: StoredAdmin[];
+  secrets?: Record<string, string>;
 }
 
-const DATA_DIR = path.resolve(process.env.LOCAL_DATA_DIR || '.data');
+// On Vercel only /tmp is writable (and it is temporary): fine for a quick test, not for real orders.
+const DATA_DIR = path.resolve(process.env.LOCAL_DATA_DIR || (process.env.VERCEL ? '/tmp/taaibosch-data' : '.data'));
 const DATA_FILE = path.join(DATA_DIR, 'db.json');
 export const LOCAL_UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 let writeChain: Promise<unknown> = Promise.resolve();
@@ -373,6 +389,10 @@ const localDb: Db = {
     await fs.writeFile(path.join(LOCAL_UPLOAD_DIR, file), bytes);
     return `/uploads/${file}`;
   },
+  async getSecret(key) {
+    return (await load()).secrets?.[key] ?? null;
+  },
+  setSecret: (key, value) => mutate(d => { d.secrets = { ...(d.secrets ?? {}), [key]: value }; }),
 };
 
 export const db = (): Db => (hasSupabase() ? supabaseDb : localDb);

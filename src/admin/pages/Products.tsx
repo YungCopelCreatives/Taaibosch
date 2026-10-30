@@ -250,7 +250,7 @@ export const ProductEditor: React.FC = () => {
 
           <Card className="p-6 space-y-5">
             <h2 className="font-semibold">Photos</h2>
-            <Field label="Main photo" error={errors.image} hint="Square photos look best. JPG, PNG or WebP under 5 MB.">
+            <Field label="Main photo" error={errors.image} hint="Square photos look best. JPG, PNG or WebP under 4 MB.">
               <ImagePicker value={p.image} onChange={v => set('image', v)} />
             </Field>
             <Field label="Gallery" hint="Extra photos shown on the product page">
@@ -323,7 +323,7 @@ const ImagePicker: React.FC<{ value: string; onChange: (url: string) => void; co
   const notify = useNotify();
 
   const upload = async (file: File) => {
-    if (file.size > 5 * 1024 * 1024) return notify('That photo is over 5 MB. Please use a smaller one.', 'error');
+    if (file.size > 4 * 1024 * 1024) return notify('That photo is over 4 MB. Please use a smaller one.', 'error');
     setBusy(true);
     try {
       const { url } = await api<{ url: string }>('upload', { raw: file, query: { name: file.name } });

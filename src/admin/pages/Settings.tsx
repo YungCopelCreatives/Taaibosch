@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Store, Truck, SlidersHorizontal, Megaphone } from 'lucide-react';
+import { Store, Truck, SlidersHorizontal, Megaphone, CreditCard, CheckCircle2, AlertCircle, Copy } from 'lucide-react';
 import { api } from '../api';
 import { Button, Card, ChipsEditor, Field, Input, PageHeader, Spinner, Textarea, Toggle, useNotify } from '../ui';
 import { useCatalog } from '../../CatalogContext';
@@ -11,6 +11,7 @@ const TABS = [
   { id: 'delivery', label: 'Delivery', icon: Truck },
   { id: 'filters', label: 'Shop filters', icon: SlidersHorizontal },
   { id: 'announcement', label: 'Announcement', icon: Megaphone },
+  { id: 'payments', label: 'Payments', icon: CreditCard },
 ] as const;
 
 export const SettingsPage: React.FC = () => {
@@ -122,6 +123,8 @@ export const SettingsPage: React.FC = () => {
         </div>
       )}
 
+      {tab === 'payments' && <PaymentsPanel />}
+
       {tab === 'announcement' && (
         <Card className="p-6 space-y-5 max-w-2xl">
           <Toggle checked={s.announcement.enabled} onChange={enabled => set({ announcement: { ...s.announcement, enabled } })} label="Show announcement on the home page" description="A small card that slides in for a few seconds, great for promotions or delivery notices." />
@@ -142,6 +145,97 @@ export const SettingsPage: React.FC = () => {
         <Button variant="ghost" onClick={() => setS(JSON.parse(saved))}>Discard</Button>
         <Button loading={saving} onClick={save}>Save settings</Button>
       </div>
+    </div>
+  );
+};
+
+interface PaymentsStatus {
+  mode: 'test' | 'live' | 'missing';
+  connected: boolean;
+  connectedVia: 'hosting settings' | 'dashboard' | null;
+  connectedUrl: string | null;
+  webhookUrl: string;
+  storage: 'supabase' | 'local';
+  isLocalhost: boolean;
+}
+
+/** Yoco status + one-tap "Connect Yoco" so paid orders are confirmed automatically. */
+const PaymentsPanel: React.FC = () => {
+  const notify = useNotify();
+  const [st, setSt] = useState<PaymentsStatus | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [shownSecret, setShownSecret] = useState('');
+  const load = () => api<PaymentsStatus>('payments').then(setSt).catch(e => setError(e.message));
+  useEffect(() => { load(); }, []);
+  if (!st) return error ? <Card className="p-6 text-sm text-red-600 max-w-2xl">{error}</Card> : <Spinner />;
+
+  const urlChanged = st.connected && st.connectedVia === 'dashboard' && st.connectedUrl && st.connectedUrl !== st.webhookUrl;
+
+  const connect = async () => {
+    setBusy(true);
+    setError('');
+    try {
+      const res = await api<{ secret?: string }>('payments/connect', { method: 'POST', body: {} });
+      if (res.secret) setShownSecret(res.secret);
+      notify('Yoco connected. Paid orders will now be confirmed automatically.');
+      load();
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+      <Card className="p-6 space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="font-semibold">Yoco card payments</h2>
+          {st.mode === 'missing'
+            ? <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-50 text-red-700">Not set up</span>
+            : <span className={cn('text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full', st.mode === 'live' ? 'bg-brand-green-light text-brand-green-deep' : 'bg-amber-50 text-amber-800')}>{st.mode === 'live' ? 'Live payments' : 'Test mode'}</span>}
+        </div>
+        {st.mode === 'missing' && <p className="text-sm text-brand-ink/60">Add <code>YOCO_SECRET_KEY</code> to the hosting settings and restart the site. Until then, checkout asks customers to order on WhatsApp.</p>}
+        {st.mode === 'test' && <p className="text-sm text-brand-ink/60">Payments use Yoco's test cards, so no real money moves. Switch to the <code>sk_live_</code> key when you're ready to sell.</p>}
+      </Card>
+
+      {st.mode !== 'missing' && (
+        <Card className="p-6 space-y-4">
+          <div className="flex items-start gap-3">
+            {st.connected && !urlChanged ? <CheckCircle2 className="text-brand-green-deep flex-shrink-0 mt-0.5" size={20} /> : <AlertCircle className="text-amber-600 flex-shrink-0 mt-0.5" size={20} />}
+            <div className="space-y-1">
+              <h3 className="font-semibold text-sm">Payment confirmations</h3>
+              <p className="text-sm text-brand-ink/60">
+                {st.connected && !urlChanged
+                  ? `Connected${st.connectedVia === 'hosting settings' ? ' through the hosting settings' : ''}. Yoco tells the shop the moment an order is paid, so it shows as Paid here, stock goes down and the order emails go out.`
+                  : urlChanged
+                    ? `Connected to ${st.connectedUrl}, but you're now using ${new URL(st.webhookUrl).origin}. Connect again so confirmations come to this address.`
+                    : 'Not connected yet. Without this, orders stay "Awaiting payment" even after the customer pays.'}
+              </p>
+            </div>
+          </div>
+          <div className="p-3 rounded-xl bg-brand-grey text-xs break-all"><span className="text-brand-ink/50">Confirmations go to </span>{st.webhookUrl}</div>
+          {st.isLocalhost && <p className="text-xs text-amber-700">Open the dashboard on the live web address (not localhost) to connect.</p>}
+          {st.storage === 'local' && <p className="text-xs text-amber-700">The database isn't connected, so this connection is kept only temporarily. Connect Supabase for real orders.</p>}
+          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+          {(!st.connected || urlChanged) ? (
+            <Button loading={busy} disabled={st.isLocalhost} onClick={connect}><CreditCard size={16} /> Connect Yoco</Button>
+          ) : st.connectedVia === 'dashboard' ? (
+            <Button variant="secondary" size="sm" loading={busy} onClick={() => confirm('Connect again? Only needed if confirmations stop arriving or you changed the web address.') && connect()}>Connect again</Button>
+          ) : null}
+          {shownSecret && (
+            <div className="p-4 rounded-2xl bg-amber-50 text-sm space-y-2">
+              <p className="font-semibold">Also save this in the hosting settings as <code>YOCO_WEBHOOK_SECRET</code></p>
+              <p className="text-xs text-amber-900">Because the database isn't connected yet, keep a copy here so confirmations keep working after the site restarts. It's shown only once.</p>
+              <div className="flex gap-2 items-center">
+                <code className="flex-grow p-2 rounded-lg bg-white text-xs break-all">{shownSecret}</code>
+                <Button variant="secondary" size="sm" onClick={() => navigator.clipboard.writeText(shownSecret).then(() => notify('Copied'))}><Copy size={14} /> Copy</Button>
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
     </div>
   );
 };

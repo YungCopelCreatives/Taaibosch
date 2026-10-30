@@ -18,6 +18,28 @@ function secretKey(): string {
 }
 
 export const isTestMode = () => (process.env.YOCO_SECRET_KEY ?? '').startsWith('sk_test_');
+export const keyMode = (): 'test' | 'live' | 'missing' => {
+  const k = process.env.YOCO_SECRET_KEY ?? '';
+  return k.startsWith('sk_live_') ? 'live' : k.startsWith('sk_test_') ? 'test' : 'missing';
+};
+
+/**
+ * Tells Yoco where to send payment notifications (one-time, per key: test and live).
+ * Returns Yoco's signing secret, which is shown only once.
+ */
+export async function registerYocoWebhook(url: string): Promise<{ secret: string; id?: string }> {
+  const res = await fetch(`${YOCO_API}/webhooks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secretKey()}` },
+    body: JSON.stringify({ name: 'taaibosch-orders', url }),
+  });
+  const data = (await res.json().catch(() => ({}))) as { secret?: string; id?: string; errorMessage?: string; message?: string };
+  if (!res.ok || !data.secret) {
+    console.error('[yoco] register webhook failed', res.status, data);
+    throw new Error(data.errorMessage || data.message || `Yoco returned ${res.status}`);
+  }
+  return { secret: data.secret, id: data.id };
+}
 
 export interface YocoCheckout {
   id: string;
@@ -69,9 +91,8 @@ export async function createYocoCheckout(order: Order, siteUrl: string): Promise
  * Verifies a Yoco webhook (Standard Webhooks / HMAC-SHA256).
  * `rawBody` must be the exact bytes Yoco sent, before any JSON parsing.
  */
-export function verifyYocoWebhook(headers: Headers, rawBody: string): boolean {
-  const secret = process.env.YOCO_WEBHOOK_SECRET;
-  if (!secret) throw new PaymentConfigError('YOCO_WEBHOOK_SECRET is not set.');
+export function verifyYocoWebhook(headers: Headers, rawBody: string, secret = process.env.YOCO_WEBHOOK_SECRET): boolean {
+  if (!secret) throw new PaymentConfigError('Payment confirmations are not connected (no webhook secret).');
 
   const id = headers.get('webhook-id');
   const timestamp = headers.get('webhook-timestamp');

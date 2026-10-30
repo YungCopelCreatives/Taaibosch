@@ -97,6 +97,14 @@ create table if not exists public.admin_users (
 );
 alter table public.admin_users enable row level security;
 
+-- Server-only values, e.g. the Yoco webhook secret saved by Dashboard > Settings > Payments
+create table if not exists public.secrets (
+  key         text primary key,
+  value       text not null,
+  updated_at  timestamptz not null default now()
+);
+alter table public.secrets enable row level security;
+
 -- Public bucket for product photos uploaded in the dashboard
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('product-images', 'product-images', true, 5242880, array['image/jpeg','image/png','image/webp'])

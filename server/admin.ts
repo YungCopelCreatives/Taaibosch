@@ -11,6 +11,7 @@ import {
 } from './auth';
 import { getCatalog, invalidateCatalog, seedProductsIfEmpty } from './catalog';
 import { sendDispatchEmail, sendTeamInvite, canEmail } from './notify';
+import { keyMode, registerYocoWebhook } from './yoco';
 import { normaliseSettings } from '../src/data/store';
 import type { AdminOrder, AdminRole, FulfilmentStatus, Product, StoreSettings } from '../src/types';
 
@@ -264,7 +265,7 @@ async function upload(c: Ctx) {
   const type = c.req.headers.get('content-type') ?? '';
   if (!/^image\/(jpeg|png|webp)$/.test(type)) return fail(415, 'Upload a JPG, PNG or WebP image.');
   const bytes = new Uint8Array(await c.req.arrayBuffer());
-  if (bytes.length > 5 * 1024 * 1024) return fail(413, 'Images must be under 5 MB.');
+  if (bytes.length > 4 * 1024 * 1024) return fail(413, 'Images must be under 4 MB.');
   const name = slug(str(c.url.searchParams.get('name'), 60).replace(/\.\w+$/, '')) + '.' + type.split('/')[1].replace('jpeg', 'jpg');
   return json({ url: await db().uploadImage(name, bytes, type) }, 201);
 }
@@ -407,6 +408,38 @@ export async function adminHandler(req: Request): Promise<Response> {
       if (!id && method === 'GET') return json({ reviews: await db().listReviews(false) });
       if (id && method === 'PATCH') { await db().updateReview(id, Boolean(body.approved)); return json({ ok: true }); }
       if (id && method === 'DELETE') { await db().deleteReview(id); return json({ ok: true }); }
+    }
+
+    if (area === 'payments') {
+      if (!can(user.role, 'settings')) return deny();
+      const mode = keyMode();
+      const origin = new URL(req.url).origin;
+      const webhookUrl = `${origin}/api/yoco-webhook`;
+      const saved = mode === 'missing' ? null : await db().getSecret(`yoco_webhook_secret_${mode}`);
+      const savedUrl = mode === 'missing' ? null : await db().getSecret(`yoco_webhook_url_${mode}`);
+      if (method === 'GET') {
+        return json({
+          mode,
+          connected: Boolean(process.env.YOCO_WEBHOOK_SECRET || saved),
+          connectedVia: process.env.YOCO_WEBHOOK_SECRET ? 'hosting settings' : saved ? 'dashboard' : null,
+          connectedUrl: savedUrl,
+          webhookUrl,
+          storage: db().kind,
+          isLocalhost: /localhost|127\.0\.0\.1/.test(origin),
+        });
+      }
+      if (id === 'connect' && method === 'POST') {
+        if (mode === 'missing') return fail(422, 'Add YOCO_SECRET_KEY to the hosting settings first, then restart the site.');
+        if (!origin.startsWith('https://')) return fail(422, 'Open the dashboard on the live https address of the site, then try again.');
+        try {
+          const { secret } = await registerYocoWebhook(webhookUrl);
+          await db().setSecret(`yoco_webhook_secret_${mode}`, secret);
+          await db().setSecret(`yoco_webhook_url_${mode}`, webhookUrl);
+          return json({ ok: true, mode, webhookUrl, secret: db().kind === 'local' ? secret : undefined });
+        } catch (e) {
+          return fail(502, `Yoco didn't accept the connection: ${e instanceof Error ? e.message : 'unknown error'}`);
+        }
+      }
     }
 
     if (area === 'settings') {

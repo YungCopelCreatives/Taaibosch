@@ -31,14 +31,26 @@ Uses GoDaddy's Node.js app hosting (Express on Node 22). Needs a GoDaddy **Web H
 5. **Preview** – check the private preview link works (shop loads, `/admin` sign-in page appears).
 6. **Publish** – publish to the Web Hosting plan and connect `taaiboschorganic.co.za` (one click for a GoDaddy domain).
    Use `www.` as the main address; HTTPS is automatic.
-7. **Yoco webhook** – once the domain works, run once and add the printed `YOCO_WEBHOOK_SECRET` line to the `.env`:
-   ```bash
-   YOCO_SECRET_KEY=sk_test_... node scripts/register-yoco-webhook.mjs https://www.taaiboschorganic.co.za
-   ```
-8. **First sign-in** – go to `/admin`, sign in with `ADMIN_BOOTSTRAP_EMAIL` / `ADMIN_BOOTSTRAP_PASSWORD`,
+7. **First sign-in** – go to `/admin`, sign in with `ADMIN_BOOTSTRAP_EMAIL` / `ADMIN_BOOTSTRAP_PASSWORD`,
    complete the profile, then remove those two variables. The starter products are copied into the database the
    first time the Products page opens.
-9. **Test order** with the Yoco test key, then switch to the live key (and register the webhook again with the live key).
+8. **Connect Yoco** – Dashboard → Settings → Payments → *Connect Yoco*. This tells Yoco where to send payment
+   confirmations for this address and saves the signing secret in the database (no copy-pasting).
+9. **Test order** with the Yoco test key, then switch to the live key and press *Connect Yoco* again.
+
+## Testing on Vercel first (vercel.app)
+
+The same code also runs on Vercel (`vercel.json` + `npm run build:vercel`, one serverless function for the API).
+
+1. Merge the pull request into `main`; Vercel deploys the production `*.vercel.app` address.
+   (Preview links are password-protected by Vercel, so Yoco can't reach them — test on the production vercel.app link.)
+2. Vercel → Project → Settings → Environment Variables: `ADMIN_SESSION_SECRET`, `ADMIN_BOOTSTRAP_EMAIL`,
+   `ADMIN_BOOTSTRAP_PASSWORD`, `YOCO_SECRET_KEY` (test key), `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
+   **Do not set `SITE_URL` on Vercel** (payment return links then use the vercel.app address). Redeploy.
+3. `/admin` → sign in → profile → Settings → Payments → *Connect Yoco* → place a test order.
+4. When moving to GoDaddy, press *Connect Yoco* again from the GoDaddy site so confirmations go there.
+
+Without Supabase, Vercel keeps data only temporarily — always connect Supabase for a real test.
 
 GoDaddy also offers MySQL; this site uses Supabase instead, because product photos and orders must survive redeploys.
 
