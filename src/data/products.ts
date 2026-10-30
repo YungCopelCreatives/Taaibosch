@@ -11,7 +11,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '1',
     name: 'Sea Moss Capsules',
-    price: 200,
+    price: 230,
     category: 'Capsules',
     healthGoals: ['Energy', 'Skin', 'Vitality'],
     image: '/assets/products/capsules/seamoss-capsule.webp',
@@ -47,7 +47,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '3',
     name: 'Elderberry Capsules',
-    price: 200,
+    price: 230,
     category: 'Capsules',
     healthGoals: ['Immunity', 'Vitality'],
     image: '/assets/products/capsules/elderberry-capsule.webp',
@@ -65,7 +65,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '4',
     name: 'Pau d’Arco Capsules',
-    price: 200,
+    price: 230,
     category: 'Capsules',
     healthGoals: ['Cleansing', 'Immunity'],
     image: "/assets/products/capsules/pau-darco-capsule.webp",
@@ -82,7 +82,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '5',
     name: 'Bromide Plus Capsules',
-    price: 250,
+    price: 230,
     category: 'Capsules',
     healthGoals: ['Energy', 'Vitality', 'Thyroid'],
     image: '/assets/products/capsules/bromide-plus-capsule.webp',
@@ -101,7 +101,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '27',
     name: 'Burdock Capsules',
-    price: 200,
+    price: 230,
     category: 'Capsules',
     healthGoals: ['Detox', 'Skin', 'Blood'],
     image: '/assets/products/capsules/burdock-capsule.webp',
@@ -169,7 +169,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '22',
     name: 'Elderberry Raw',
-    price: 140,
+    price: 180,
     category: 'Raw',
     healthGoals: ['Immunity', 'Vitality'],
     image: '/assets/products/raw/elderberry-raw.webp',
@@ -185,7 +185,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '12',
     name: 'Valerian Raw',
-    price: 170,
+    price: 180,
     category: 'Raw',
     healthGoals: ['Relaxation', 'Sleep', 'Stress'],
     image: '/assets/products/raw/valerian-raw.webp',
@@ -201,7 +201,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '13',
     name: 'Hibiscus Raw',
-    price: 140,
+    price: 180,
     category: 'Raw',
     healthGoals: ['Heart', 'Nutrition', 'Detox'],
     image: '/assets/products/raw/hibiscus-raw.webp',
@@ -217,7 +217,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '26',
     name: 'Dandelion Raw',
-    price: 150,
+    price: 180,
     category: 'Raw',
     healthGoals: ['Detox', 'Digestion', 'Cleansing'],
     image: '/assets/products/raw/dandelion-raw.webp',
@@ -233,7 +233,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '24',
     name: 'Bladderwrack Raw',
-    price: 150,
+    price: 180,
     category: 'Raw',
     healthGoals: ['Thyroid', 'Metabolism', 'Vitality'],
     image: '/assets/products/raw/bladderwrack-raw.webp',
@@ -249,7 +249,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '7',
     name: 'Yellow Dock Raw',
-    price: 180,
+    price: 230,
     category: 'Raw',
     healthGoals: ['Blood', 'Cleansing', 'Detox'],
     image: '/assets/products/raw/yellowdock-raw.webp',
@@ -265,7 +265,7 @@ export const STARTER_PRODUCTS: Product[] = [
   {
     id: '25',
     name: 'Pau d’Arco Raw',
-    price: 160,
+    price: 180,
     category: 'Raw',
     healthGoals: ['Cleansing', 'Immunity'],
     image: '/assets/products/raw/pau-darco-raw.webp',
