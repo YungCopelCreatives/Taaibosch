@@ -7,11 +7,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, MessageCircle, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import { EMAIL, LOCATION, WHATSAPP_NUMBER, BLOG_POSTS } from '../constants';
+import { EMAIL, LOCATION, WHATSAPP_NUMBER, BLOG_POSTS, whatsappLink } from '../constants';
 import { ImageWithSkeleton } from '../components/ImageWithSkeleton';
+import { usePageMeta } from '../lib/usePageMeta';
+
+const Meta: React.FC<{ title: string; description?: string }> = ({ title, description }) => {
+  usePageMeta(title, description);
+  return null;
+};
 
 export const About: React.FC = () => (
   <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-4xl mx-auto space-y-24">
+    <Meta title="Our Story" description="Taaibosch Organics was built on a simple belief: nature already provides what the body needs to restore, heal and thrive." />
     <section className="space-y-12 text-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -28,7 +35,7 @@ export const About: React.FC = () => (
         transition={{ delay: 0.2 }}
         className="aspect-video rounded-[2rem] overflow-hidden bg-brand-grey w-full h-full"
       >
-        <ImageWithSkeleton src="/assets/general/about-bg.png" alt="About Taaibosch" className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+        <ImageWithSkeleton src="/assets/general/about-bg.webp" alt="About Taaibosch" className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
       </motion.div>
 
       <div className="space-y-8 text-lg md:text-xl text-brand-ink/60 leading-relaxed text-left max-w-2xl mx-auto">
@@ -63,6 +70,7 @@ export const About: React.FC = () => (
 
 export const Contact: React.FC = () => (
   <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
+    <Meta title="Contact Us" description="Questions about our products or your order? WhatsApp or email Taaibosch Organics." />
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
       <div className="space-y-12">
         <div className="space-y-4">
@@ -75,15 +83,15 @@ export const Contact: React.FC = () => (
 
         <div className="space-y-8">
           <a 
-            href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+            href={whatsappLink()}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center space-x-6 p-8 bg-brand-grey rounded-[2rem] hover:bg-brand-ink hover:text-white transition-all group"
+            className="flex items-center space-x-4 sm:space-x-6 p-6 sm:p-8 bg-brand-grey rounded-[2rem] hover:bg-brand-ink hover:text-white transition-all group"
           >
-            <div className="p-4 bg-white rounded-2xl text-brand-ink group-hover:bg-white/10 group-hover:text-white transition-all">
+            <div className="flex-shrink-0 p-4 bg-white rounded-2xl text-brand-ink group-hover:bg-white/10 group-hover:text-white transition-all">
               <MessageCircle size={24} />
             </div>
-            <div>
+            <div className="min-w-0">
               <h4 className="font-bold text-sm uppercase tracking-widest">WhatsApp</h4>
               <p className="text-lg font-medium">{WHATSAPP_NUMBER}</p>
             </div>
@@ -91,36 +99,36 @@ export const Contact: React.FC = () => (
 
           <a 
             href={`mailto:${EMAIL}`}
-            className="flex items-center space-x-6 p-8 bg-brand-grey rounded-[2rem] hover:bg-brand-ink hover:text-white transition-all group"
+            className="flex items-center space-x-4 sm:space-x-6 p-6 sm:p-8 bg-brand-grey rounded-[2rem] hover:bg-brand-ink hover:text-white transition-all group"
           >
-            <div className="p-4 bg-white rounded-2xl text-brand-ink group-hover:bg-white/10 group-hover:text-white transition-all">
+            <div className="flex-shrink-0 p-4 bg-white rounded-2xl text-brand-ink group-hover:bg-white/10 group-hover:text-white transition-all">
               <Mail size={24} />
             </div>
-            <div>
+            <div className="min-w-0">
               <h4 className="font-bold text-sm uppercase tracking-widest">Email</h4>
-              <p className="text-lg font-medium">{EMAIL}</p>
+              <p className="text-lg font-medium break-words">{EMAIL}</p>
             </div>
           </a>
 
-          <div className="flex items-center space-x-6 p-8 bg-brand-grey rounded-[2rem]">
-            <div className="p-4 bg-white rounded-2xl text-brand-ink">
+          <div className="flex items-center space-x-4 sm:space-x-6 p-6 sm:p-8 bg-brand-grey rounded-[2rem]">
+            <div className="flex-shrink-0 p-4 bg-white rounded-2xl text-brand-ink">
               <MapPin size={24} />
             </div>
-            <div>
+            <div className="min-w-0">
               <h4 className="font-bold text-sm uppercase tracking-widest">Location</h4>
-              <p className="text-lg font-medium">{LOCATION}</p>
+              <p className="text-lg font-medium break-words">{LOCATION}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-brand-beige rounded-[3rem] p-12 md:p-20 flex flex-col justify-center space-y-8">
+      <div className="bg-brand-beige rounded-[3rem] p-8 sm:p-12 md:p-20 flex flex-col justify-center space-y-8">
         <h3 className="text-3xl font-semibold tracking-tight">Partner With Taaibosch</h3>
         <p className="text-brand-ink/60 leading-relaxed text-lg">
           Looking to resell our products? Join a growing community bringing natural wellness to more people.
         </p>
         <a 
-          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=Hello, I am interested in reselling Taaibosch Organics products.`}
+          href={whatsappLink('Hello, I am interested in reselling Taaibosch Organics products.')}
           target="_blank"
           rel="noreferrer"
           className="inline-flex items-center justify-between px-10 py-5 bg-brand-ink text-white rounded-full text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all"
@@ -135,6 +143,7 @@ export const Contact: React.FC = () => (
 
 export const Blog: React.FC = () => (
   <div className="pt-32 lg:pt-40 pb-24 px-6 max-w-7xl mx-auto">
+    <Meta title="Herbal Education Blog" description="Guides on sea moss, adaptogens and traditional herbs from Taaibosch Organics." />
     <div className="space-y-4 mb-16">
       <h2 className="text-xs uppercase tracking-[0.3em] font-bold text-brand-ink/40">Wellness Blog</h2>
       <h1 className="text-4xl md:text-5xl font-semibold tracking-tight leading-tight">Herbal Education</h1>

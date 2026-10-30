@@ -4,6 +4,9 @@
   --color-brand-green-deep: #2D5A27;
   --color-brand-green-moss: #A5B68D;
   --color-brand-green-light: #F1F4F0;
+  /* Sage accent. Was referenced 140+ times but never defined, so badges, notes and
+     "Best for" pills rendered with no colour at all. */
+  --color-brand-green: #C5D3B5;
   --color-brand-beige: #FAF9F6;
   --color-brand-grey: #F5F5F7;
   --color-brand-ink: #1A2419; /* A very dark green instead of pure black */
@@ -13,6 +16,16 @@
 @layer base {
   body {
     @apply bg-white text-brand-ink font-sans antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-green-deep);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -26,4 +39,14 @@
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+}
+
+@layer utilities {
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+@media print {
+  aside, header, nav { display: none !important; }
+  main { padding: 0 !important; }
 }

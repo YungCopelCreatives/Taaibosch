@@ -7,11 +7,12 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Filter, ChevronDown, X, Search, Heart } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { PRODUCTS } from '../constants';
+import { PRODUCTS, CATEGORIES, HEALTH_GOALS } from '../constants';
 import { ProductCard } from '../components/ProductCard';
 import { ProductSkeleton } from '../components/Skeleton';
-import { Category, HealthGoal } from '../types';
+import { Category, HealthGoal, isInStock } from '../types';
 import { useCart } from '../CartContext';
+import { usePageMeta } from '../lib/usePageMeta';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -25,10 +26,11 @@ export const Shop: React.FC = () => {
   const navigate = useNavigate();
   const { wishlist } = useCart();
   const isWishlistPage = location.pathname === '/wishlist';
+  usePageMeta(isWishlistPage ? 'Your Wishlist' : 'Shop Herbal Wellness', 'Shop wildcrafted sea moss, herbal capsules, sea moss gels and raw herbs. Delivered across South Africa, free over R1000.');
   
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
   const [selectedGoals, setSelectedGoals] = useState<HealthGoal[]>([]);
-  const [priceRange, setPriceRange] = useState<number>(1000);
+  const [priceRange, setPriceRange] = useState<number>(Infinity);
   const [sortBy, setSortBy] = useState<'Popular' | 'Price low-high' | 'Price high-low'>('Popular');
   const [searchQuery, setSearchQuery] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -41,8 +43,10 @@ export const Shop: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const categories: (Category | 'All')[] = ['All', 'Capsules', 'Seamoss', 'Raw', 'Gel'];
-  const healthGoals: HealthGoal[] = ['Immunity', 'Energy', 'Detox', 'Skin', 'Hormonal balance', 'Metabolism', 'Thyroid', 'Digestion', 'Cleansing', 'Respiratory', 'Vitality', 'Relaxation', 'Sleep', 'Heart', 'Nutrition', 'Stress', 'Blood'];
+  // Filter lists are edited in Dashboard > Settings > Shop filters
+  const categories: (Category | 'All')[] = ['All', ...CATEGORIES];
+  const healthGoals: HealthGoal[] = HEALTH_GOALS.filter(g => PRODUCTS.some(p => p.healthGoals.includes(g)));
+  const maxPrice = Math.max(100, Math.ceil(Math.max(0, ...PRODUCTS.map(p => p.price)) / 50) * 50);
 
   const filteredProducts = useMemo(() => {
     let result = [...PRODUCTS];
@@ -77,9 +81,11 @@ export const Shop: React.FC = () => {
     } else if (sortBy === 'Popular') {
       result.sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
     }
+    // Sold-out products go to the end
+    result.sort((a, b) => Number(!isInStock(a)) - Number(!isInStock(b)));
 
     return result;
-  }, [selectedCategory, selectedGoals, priceRange, sortBy, isWishlistPage, wishlist, searchQuery]);
+  }, [selectedCategory, selectedGoals, priceRange, sortBy, isWishlistPage, wishlist, searchQuery, PRODUCTS]);
 
   const toggleGoal = (goal: HealthGoal) => {
     setSelectedGoals(prev => 
@@ -153,15 +159,15 @@ export const Shop: React.FC = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink/40">Price Range</h4>
-          <span className="text-xs font-bold">Up to R{priceRange}</span>
+          <span className="text-xs font-bold">{priceRange >= maxPrice ? 'Any price' : `Up to R${priceRange}`}</span>
         </div>
         <input 
           type="range" 
           min="0" 
-          max="1000" 
+          max={maxPrice} 
           step="50"
-          value={priceRange}
-          onChange={(e) => setPriceRange(parseInt(e.target.value))}
+          value={Math.min(priceRange, maxPrice)}
+          onChange={(e) => { const v = parseInt(e.target.value); setPriceRange(v >= maxPrice ? Infinity : v); }}
           className="w-full accent-brand-green-deep"
         />
       </div>
@@ -170,7 +176,7 @@ export const Shop: React.FC = () => {
         onClick={() => {
           setSelectedCategory('All');
           setSelectedGoals([]);
-          setPriceRange(1000);
+          setPriceRange(Infinity);
           setSortBy('Popular');
           setSearchQuery('');
         }}
@@ -203,6 +209,7 @@ export const Shop: React.FC = () => {
         <div className="flex items-center space-x-4 w-full md:w-auto">
           <div className="relative flex-grow md:flex-grow-0">
             <select 
+              aria-label="Sort products"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               className="appearance-none bg-brand-grey px-6 py-4 pr-12 rounded-2xl text-xs font-bold uppercase tracking-widest focus:outline-none w-full"
@@ -216,7 +223,8 @@ export const Shop: React.FC = () => {
 
           <button 
             onClick={() => setIsFilterOpen(true)}
-            className="md:hidden p-4 bg-brand-grey rounded-2xl"
+            aria-label="Filters"
+            className="lg:hidden p-4 bg-brand-grey rounded-2xl"
           >
             <Filter size={20} />
           </button>
@@ -268,7 +276,7 @@ export const Shop: React.FC = () => {
                   } else {
                     setSelectedCategory('All');
                     setSelectedGoals([]);
-                    setPriceRange(1000);
+                    setPriceRange(Infinity);
                     setSearchQuery('');
                   }
                 }}

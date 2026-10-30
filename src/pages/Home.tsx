@@ -7,13 +7,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Leaf, ShieldCheck, Zap, Heart } from 'lucide-react';
 import { motion } from 'motion/react';
-import { PRODUCTS, WHATSAPP_NUMBER } from '../constants';
+import { PRODUCTS, WHATSAPP_NUMBER, ANNOUNCEMENT, whatsappLink } from '../constants';
 import { ProductCard } from '../components/ProductCard';
 import { ProductSkeleton } from '../components/Skeleton';
 import { AnimatePresence } from 'motion/react';
 import { ImageWithSkeleton } from '../components/ImageWithSkeleton';
+import { usePageMeta } from '../lib/usePageMeta';
 
 export const Home: React.FC = () => {
+  usePageMeta();
   const [isLoading, setIsLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const bestSellers = PRODUCTS.filter(p => p.isBestSeller).slice(0, 4);
@@ -103,7 +105,7 @@ export const Home: React.FC = () => {
 
         {/* Dynamic & Timed Free Shipping Popup Announcement */}
         <AnimatePresence>
-          {showPopup && (
+          {showPopup && ANNOUNCEMENT.enabled && ANNOUNCEMENT.title && (
             <motion.div
               initial={{ opacity: 0, y: 50, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -114,10 +116,11 @@ export const Home: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 text-brand-green-deep">
                   <span className="w-2.5 h-2.5 rounded-full bg-brand-green-deep animate-pulse" />
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Fulfillment Alert</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Announcement</span>
                 </div>
                 <button 
                   onClick={() => setShowPopup(false)}
+                  aria-label="Dismiss"
                   className="p-1 hover:bg-black/5 rounded-full transition-colors text-brand-ink/40 hover:text-brand-ink"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,14 +130,14 @@ export const Home: React.FC = () => {
               </div>
               
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-brand-ink">Orders above R1000 get FREE Delivery!</h4>
+                <h4 className="font-bold text-sm text-brand-ink">{ANNOUNCEMENT.title}</h4>
                 <p className="text-xs text-brand-ink/60 leading-relaxed">
-                  Combine your wellness favorites—Free delivery applies automatically across South Africa once your subtotal hits R1000.
+                  {ANNOUNCEMENT.text}
                 </p>
               </div>
               
               <div className="pt-2 border-t border-black/5 text-[9px] text-brand-ink/40 tracking-wide font-medium flex items-center justify-between">
-                <span>* Metro Hub deliveries query. Terms apply.</span>
+                <span>Pay securely by card at checkout.</span>
                 <Link to="/delivery-and-shipping" className="underline hover:text-brand-green-deep font-bold text-brand-ink/80 transition-colors">See Conditions</Link>
               </div>
             </motion.div>
@@ -231,8 +234,8 @@ export const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto bg-brand-green-deep text-white rounded-[2rem] p-12 md:p-20 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
             <img 
-              src="/assets/general/partner-bg.png" 
-              alt="Partner Background" 
+              src="/assets/general/partner-bg.webp" 
+              alt="" 
               className="w-full h-full object-cover"
             />
           </div>
@@ -246,7 +249,7 @@ export const Home: React.FC = () => {
               Bring natural wellness to more people while growing your own business. We offer premium support and competitive wholesale pricing.
             </p>
             <a 
-              href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=Hello, I am interested in reselling Taaibosch Organics products.`}
+              href={whatsappLink('Hello, I am interested in reselling Taaibosch Organics products.')}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center space-x-3 px-10 py-4 bg-white text-brand-green-deep rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-brand-green-light transition-all shadow-xl"

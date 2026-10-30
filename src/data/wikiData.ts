@@ -1,8 +1,8 @@
 import { BlogPost, WikiArticle } from '../types';
-// @ts-expect-error - PNG import for Vite asset
-import regeneratedImage1 from '../assets/images/regenerated_image_1781944058568.png';
-// @ts-expect-error - PNG import for Vite asset
-import regeneratedImage2 from '../assets/images/regenerated_image_1782030047445.png';
+// @ts-expect-error - image import handled by Vite
+import regeneratedImage1 from '../assets/images/regenerated_image_1781944058568.webp';
+// @ts-expect-error - image import handled by Vite
+import regeneratedImage2 from '../assets/images/regenerated_image_1782030047445.webp';
 
 export const WIKI_ARTICLES: { [slug: string]: WikiArticle } = {
   'chondrus-crispus': {
